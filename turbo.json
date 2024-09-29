@@ -1,0 +1,21 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build:prod": {
+      "dependsOn": ["^build:prod"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "build:debug": {
+      "dependsOn": ["^build:debug"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "types:check": {
+      "dependsOn": ["^types:check"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}
