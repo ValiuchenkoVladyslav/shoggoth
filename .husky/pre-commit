@@ -1,0 +1,10 @@
+# fix project linting
+sherif -f
+biome check --staged --no-errors-on-unmatched --write
+cargo fmt
+cargo clippy --no-deps --fix --allow-dirty --allow-staged
+
+# readd staged files
+git add $(git diff --name-only --cached) --dry-run --ignore-missing | while read -r _ file; do
+  git add $(echo "$file" | tr -d "'")
+done
