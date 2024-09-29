@@ -1,0 +1,27 @@
+# node deps
+**/node_modules/
+
+# next.js
+**/out/
+**/.next/
+**/next-env.d.ts
+
+# typescript
+*.tsbuildinfo
+
+# tauri generated
+**/gen/
+
+# generated types
+apps/@shared/core/bindings/
+
+# turborepo
+**/.turbo/
+
+# cargo
+target/
+.cargo/
+
+# ide
+.vscode/*
+!.vscode/settings.json

@@ -1,0 +1,10 @@
+{
+  "files.exclude": {
+    "bun.lockb": true,
+    "Cargo.lock": true,
+    "LICENSE": true,
+  },
+  "explorer.excludeGitIgnore": true,
+
+  "editor.inlayHints.enabled": "offUnlessPressed"
+}
