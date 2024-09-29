@@ -1,0 +1,41 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.6.3/schema.json",
+
+  "files": {
+    "include": ["*.json", "*.mjs", "*.ts", "*.tsx"],
+    "ignore": [".vscode/settings.json"]
+  },
+
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+
+  "organizeImports": {
+    "enabled": true
+  },
+
+  "linter": {
+    "rules": {
+      "recommended": true,
+
+      "a11y": {
+        "noSvgWithoutTitle": "off"
+      },
+      "suspicious": {
+        "noConfusingVoidType": "off"
+      },
+      "style": {
+        "useTemplate": "off",
+        "noNonNullAssertion": "off"
+      }
+    }
+  },
+
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "crlf"
+  }
+}
