@@ -1,0 +1,45 @@
+{
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": ["icons/icon.png", "icons/icon.ico"]
+  },
+  "build": {
+    "beforeDevCommand": "bun run next dev --turbo",
+    "frontendDist": "../out/",
+    "devUrl": "http://localhost:3000"
+  },
+  "productName": "shoggoth",
+  "identifier": "shoggoth",
+  "plugins": {},
+  "app": {
+    "windows": [
+      {
+        "decorations": false,
+        "resizable": true,
+        "minWidth": 980,
+        "minHeight": 520,
+        "maximized": true,
+        "title": "shoggoth"
+      }
+    ],
+    "security": {
+      "capabilities": [
+        {
+          "identifier": "General capabilities",
+          "description": "General capabilities",
+          "windows": ["main"],
+          "permissions": [
+            "core:default",
+            "core:window:allow-maximize",
+            "core:window:allow-unmaximize",
+            "core:window:allow-minimize",
+            "core:window:allow-close",
+            "core:window:allow-start-dragging",
+            "shell:allow-open"
+          ]
+        }
+      ]
+    }
+  }
+}

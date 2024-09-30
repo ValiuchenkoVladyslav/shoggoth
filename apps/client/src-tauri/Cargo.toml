@@ -1,0 +1,18 @@
+[package]
+name = "shoggoth-client"
+version = "1.0.0"
+edition = "2021"
+
+[dependencies]
+tauri = { version = "2.0.0-rc.5", features = [] }
+tauri-plugin-shell = "2.0.0-rc.2"
+serde.workspace = true
+serde_json = "1"
+axum = "0.7.5"
+shogg_core = { path = "../../@shared/core" }
+
+[build-dependencies]
+tauri-build = { version = "2.0.0-rc.5", features = [] }
+
+[features]
+custom-protocol = ["tauri/custom-protocol"]
