@@ -1,0 +1,25 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build:prod": {
+      "dependsOn": ["^build:prod", "build:gui"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [
+        "../../target/release/bundle/**/*",
+        "!../../target/release/bundle/appimage/**/*",
+        "../../target/x86_64-apple-darwin/release/bundle/**/*"
+      ]
+    },
+    "build:debug": {
+      "dependsOn": ["^build:debug", "build:gui"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["../../target/debug/*.exe"]
+    },
+    "build:gui": {
+      "dependsOn": ["^build:gui"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["out/**"]
+    }
+  }
+}
