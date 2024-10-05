@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { useProjectsQuery } from "~/tauri-api/projects";
-import { CreateProjectDialog } from "./_create-project-dialog";
+import { CreateProject } from "./_create-project";
 import { ProjectCard } from "./_project-card";
 import { ProjectFilter, ProjectFilterSelect } from "./_project-filter-select";
 import { ProjectsSearch } from "./_projects-search";
 
 export default function ProjectsPage() {
-  const [projectFilter, setProjectFilter] = useState(ProjectFilter.Active);
+  const [projectFilter, setProjectFilter] = useState(ProjectFilter.All);
   const projects = useProjectsQuery();
 
   if (projects.isError) {
@@ -31,8 +31,8 @@ export default function ProjectsPage() {
 
   return (
     <>
-      <section className="sticky left-0 top-0 bg-black p-3 rounded-lg flex justify-between gap-3 z-[5] scale-[1.0065]">
-        <CreateProjectDialog />
+      <section className="sticky left-0 top-0 bg-black p-3 rounded-lg flex justify-between gap-3 z-[5] border border-2">
+        <CreateProject />
 
         <ProjectsSearch />
         <ProjectFilterSelect

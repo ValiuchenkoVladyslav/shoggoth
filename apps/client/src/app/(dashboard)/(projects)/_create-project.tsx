@@ -1,14 +1,12 @@
-"use client";
-
-import { CircleOff, SquarePlus } from "lucide-react";
+import { DialogDescription } from "@radix-ui/react-dialog";
+import { SquarePlus } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
-  DialogClose,
+  DialogCancel,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -18,9 +16,8 @@ import { Textarea } from "~/components/ui/textarea";
 import type { ProjectBase } from "~/gen/ProjectBase";
 import { useCreateProjectMutation } from "~/tauri-api/projects";
 
-export function CreateProjectDialog() {
+export function CreateProject() {
   const [isOpen, setIsOpen] = useState(false);
-
   const createProject = useCreateProjectMutation();
   const { register, handleSubmit } = useForm<ProjectBase>();
 
@@ -37,7 +34,7 @@ export function CreateProjectDialog() {
           NEW PROJECT
         </Button>
       </DialogTrigger>
-      <DialogContent aria-describedby={undefined}>
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Create new project</DialogTitle>
           <DialogDescription />
@@ -64,17 +61,12 @@ export function CreateProjectDialog() {
           </section>
 
           <section className="mt-6 flex gap-2">
-            <Button type="submit" size="sm">
-              <SquarePlus />
+            <Button type="submit">
+              <SquarePlus size={22} />
               Create
             </Button>
 
-            <DialogClose asChild>
-              <Button size="sm" variant="ghost">
-                <CircleOff size={18} />
-                Cancel
-              </Button>
-            </DialogClose>
+            <DialogCancel />
           </section>
         </form>
       </DialogContent>
