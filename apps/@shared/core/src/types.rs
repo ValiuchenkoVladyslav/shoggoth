@@ -41,6 +41,7 @@ pub struct NodePos {
 pub struct DataNode {
   pub id: String,
   pub position: NodePos,
+  pub r#type: Option<String>,
   pub data: Map<String, Value>,
 }
 
