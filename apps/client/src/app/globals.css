@@ -1,3 +1,6 @@
+@import "@xyflow/react/dist/style.css";
+@import "react-toastify/dist/ReactToastify.min.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -27,7 +30,7 @@
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%
+    --chart-5: 340 75% 55%;
   }
 }
 
@@ -38,4 +41,14 @@
   .layer-light {
     @apply !bg-white !text-black;
   }
+}
+
+/* reactflow overwrites */
+.react-flow__node {
+  @apply !bg-transparent !border-0 !w-min !p-0 !outline-0 !ring-0;
+}
+
+.react-flow__node.selected > article,
+.react-flow__nodesselection-rect {
+  @apply !outline !outline-dashed !outline-blue-600 !outline-2;
 }
