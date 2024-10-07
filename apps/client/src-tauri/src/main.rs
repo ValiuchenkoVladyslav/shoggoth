@@ -26,6 +26,9 @@ fn main() {
       tls::phone_infoga::infoga_check,
       tls::phone_infoga::infoga_scan,
       tls::phone_infoga::infoga_urls,
+      tls::sherlock::sherlock_install,
+      tls::sherlock::sherlock_check,
+      tls::sherlock::sherlock_search,
     ])
     .setup(|app| {
       app.app_handle().create_app_dirs()?;
