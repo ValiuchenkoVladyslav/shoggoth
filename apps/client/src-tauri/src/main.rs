@@ -1,10 +1,15 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod app_dirs;
+
+mod common;
+use common::{AppDirs, Manager};
+
 mod projects;
 use projects::commands as prjs;
 
 mod tools;
-// use tools::commands as tls;
+use tools as tls;
 
 fn main() {
   tauri::Builder::default()
@@ -16,7 +21,16 @@ fn main() {
       prjs::get_graph,
       prjs::create_project,
       prjs::delete_project,
+      tls::phone_infoga::infoga_install,
+      tls::phone_infoga::infoga_check,
+      tls::phone_infoga::infoga_scan,
+      tls::phone_infoga::infoga_urls,
     ])
+    .setup(|app| {
+      app.app_handle().create_app_dirs()?;
+
+      Ok(())
+    })
     .run(tauri::generate_context!())
     .unwrap();
 }
