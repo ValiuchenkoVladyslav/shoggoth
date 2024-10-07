@@ -11,7 +11,9 @@ export function cn(...inputs: ClassValue[]) {
  * @param prefix prefix for the id
  */
 export function newId(prefix = "") {
-  return prefix + Math.random() + "" + Math.random();
+  return (
+    prefix + String(Math.random()).slice(2) + String(Math.random()).slice(2)
+  );
 }
 
 /** zustand type helper for store creation */
