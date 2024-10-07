@@ -1,42 +1,86 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
-import { invoke } from "@tauri-apps/api/core";
+import {
+  CheckCheck,
+  Download,
+  ExternalLinkIcon,
+  LoaderCircle,
+} from "lucide-react";
 import { ExternalLink } from "~/components/links";
 import { Button } from "~/components/ui/button";
-
-export function useInstallInfogaMutation() {
-  return useMutation({
-    mutationFn() {
-      return invoke("install_infoga");
-    },
-  });
-}
+import { Input } from "~/components/ui/input";
+import {
+  useInfogaInstallMutation,
+  useInfogaStatusQuery,
+} from "~/tools/phone_infoga/tauri-api";
+import { ToolSection } from "./_tool-section";
 
 export function PhoneInfoga() {
-  const installInfoga = useInstallInfogaMutation();
+  const installInfoga = useInfogaInstallMutation();
+  const infogaInstalled = !!useInfogaStatusQuery().data;
 
-  if (installInfoga.isError) {
-    console.error(installInfoga.error);
-  }
+  const buttonIcon = installInfoga.isPending ? (
+    <LoaderCircle className="animate-spin" />
+  ) : infogaInstalled ? (
+    <CheckCheck />
+  ) : (
+    <Download />
+  );
 
   return (
-    <article className="w-full layer-dark rounded-lg p-3 flex items-center">
-      <ExternalLink
-        className="font-bold text-xl hover:underline"
-        href="https://github.com/sundowndev/phoneinfoga"
-      >
-        PhoneInfoga
-      </ExternalLink>
+    <ToolSection
+      headingLeft={
+        <div className="flex gap-2 items-center">
+          <h1>
+            PhoneInfoga (Information gathering framework for phone numbers)
+          </h1>
 
-      <Button
-        onClick={() => {
-          installInfoga.mutate();
-        }}
-        // disabled
-      >
-        Install
-      </Button>
-    </article>
+          <ExternalLink
+            className="font-bold text-xl hover:underline text-white/75 hover:text-white"
+            href="https://github.com/sundowndev/phoneinfoga"
+          >
+            <ExternalLinkIcon />
+          </ExternalLink>
+        </div>
+      }
+      headingRight={
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            installInfoga.mutate();
+          }}
+          disabled={infogaInstalled}
+        >
+          {buttonIcon}
+          {infogaInstalled ? "Installed" : "Install"}
+        </Button>
+      }
+    >
+      <section className="flex flex-col gap-4">
+        <div>
+          <h2 className="text-xl font-semibold">Optional settings</h2>
+          <ExternalLink
+            className="text-base text-white/75 hover:text-white"
+            href="https://sundowndev.github.io/phoneinfoga/getting-started/scanners/"
+          >
+            https://sundowndev.github.io/phoneinfoga/getting-started/scanners/
+          </ExternalLink>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <h3 className="text-base font-semibold">
+            Numverify API (free 100 reqs/month; no cc required)
+          </h3>
+          <Input placeholder="NUMVERIFY_API_KEY" />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <h3 className="text-base font-semibold">Googlecse</h3>
+          <Input placeholder="GOOGLECSE_CX" />
+          <Input placeholder="GOOGLE_API_KEY" />
+          <Input placeholder="GOOGLECSE_MAX_RESULTS (default: 10)" />
+        </div>
+      </section>
+    </ToolSection>
   );
 }
