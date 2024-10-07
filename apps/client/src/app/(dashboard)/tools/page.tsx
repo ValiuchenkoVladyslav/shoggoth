@@ -1,3 +1,9 @@
+import { PhoneInfoga } from "./_phone-infoga";
+
 export default function ToolsPage() {
-  return <div>tools</div>;
+  return (
+    <section>
+      <PhoneInfoga />
+    </section>
+  );
 }
