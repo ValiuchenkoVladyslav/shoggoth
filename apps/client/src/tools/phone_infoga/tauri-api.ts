@@ -1,14 +1,23 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { invoke } from "@tauri-apps/api/core";
 import type { InfogaRes } from "~/gen/InfogaRes";
-import { infogaQueryKey } from "./utils";
+import { isBrowser } from "~/utils";
+import { infogaQueryKey, infogaStatusKey } from "./utils";
 
 /** check if {@link https://github.com/sundowndev/phoneinfoga PhoneInfoga} is installed */
 export function useInfogaStatusQuery() {
   return useQuery({
     queryKey: infogaQueryKey,
-    queryFn: () => invoke<boolean>("infoga_check"),
+    async queryFn() {
+      const result = await invoke<boolean>("infoga_check");
+
+      localStorage.setItem(infogaStatusKey, "true");
+
+      return result;
+    },
     staleTime: Number.POSITIVE_INFINITY,
+    placeholderData:
+      isBrowser && localStorage.getItem(infogaStatusKey) === "true",
   });
 }
 

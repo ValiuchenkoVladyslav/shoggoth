@@ -20,3 +20,6 @@ export type InferParams<T extends { setState: unknown; getState: unknown }> = [
   T["getState"],
   T,
 ];
+
+/** check if the code is running in the browser */
+export const isBrowser = typeof window !== "undefined";
