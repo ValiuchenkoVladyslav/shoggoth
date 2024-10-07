@@ -1,23 +1,9 @@
-import {
-  type QueryClient,
-  type Updater,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { invoke } from "@tauri-apps/api/core";
 import type { DataGraph } from "~/gen/DataGraph";
 import type { ProjectBase } from "~/gen/ProjectBase";
 import type { ProjectMeta } from "~/gen/ProjectMeta";
-
-const projectsQueryKey = ["projects"];
-
-function setProjects(
-  queryClient: QueryClient,
-  updater: Updater<ProjectMeta[] | undefined, ProjectMeta[] | undefined>,
-) {
-  return queryClient.setQueryData(projectsQueryKey, updater);
-}
+import { projectGraphQueryKey, projectsQueryKey, setProjects } from "./utils";
 
 export function useProjectsQuery() {
   return useQuery({
@@ -28,7 +14,7 @@ export function useProjectsQuery() {
 
 export function useProjectGraphQuery(projectId: ProjectMeta["id"]) {
   return useQuery({
-    queryKey: ["project_objects", projectId],
+    queryKey: projectGraphQueryKey(projectId),
     queryFn: () => invoke<DataGraph>("get_graph", { id: projectId }),
   });
 }
@@ -57,6 +43,19 @@ export function useEditProjectMetaMutation() {
       setProjects(queryClient, (old) =>
         old?.map((p) => (p.id === vars.id ? { ...vars } : p)),
       );
+    },
+  });
+}
+
+export function useEditProjectGraphMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn(vars: { id: string; graph: DataGraph }) {
+      return invoke("edit_graph", vars);
+    },
+    onSuccess(_, vars) {
+      queryClient.setQueryData(projectGraphQueryKey(vars.id), () => vars.graph);
     },
   });
 }
