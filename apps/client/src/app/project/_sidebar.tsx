@@ -4,8 +4,8 @@ import { useReactFlow } from "@xyflow/react";
 import { errorToast } from "~/components/toasts";
 import { Button } from "~/components/ui/button";
 import type { DataNode } from "~/gen/DataNode";
-import { useProject } from "~/store";
-import { useEditProjectGraphMutation } from "~/tauri-api/projects";
+import { useProject } from "~/projects/store";
+import { useEditProjectGraphMutation } from "~/projects/tauri-api";
 
 export function Sidebar() {
   const project = useProject((state) => state.project);

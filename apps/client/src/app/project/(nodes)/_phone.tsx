@@ -1,42 +1,81 @@
-import type { Node, NodeProps } from "@xyflow/react";
-import { useReducer } from "react";
-import { parsePhoneNumber } from "react-phone-number-input";
-import { BaseNode, type NodeCtxMenuAction } from "~/components/base-node";
+import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
+import { BaseNode } from "~/components/base-node";
+import {
+  ContextMenuItem,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+} from "~/components/ui/context-menu";
 import { PhoneInput } from "~/components/ui/phone-input";
+import type { InfogaRes } from "~/gen/InfogaRes";
+import {
+  useInfogaScanMutation,
+  useInfogaUrlsMutation,
+} from "~/tools/phone_infoga/tauri-api";
+import { SearchExact } from "./_text";
 
-type PhoneNode = NodeProps<
-  Node<{
-    label: string;
-    phone?: string;
-  }>
->;
+type PhoneData = Partial<InfogaRes> & {
+  phone?: string;
+};
 
-const phoneActions: NodeCtxMenuAction<PhoneNode>[] = [
-  [
-    "PhoneInfoga scan",
-    (node) => {
-      console.log("Phone info", node.data.phone);
-    },
-  ],
-];
+type PhoneNode = NodeProps<Node<PhoneData>>;
 
-export function PhoneNumberNode(props: PhoneNode) {
-  const [numberData, setNumberData] = useReducer(
-    (_: unknown, action: string) => {
-      props.data.phone = action;
+function PhoneActions(props: PhoneNode) {
+  const { updateNode } = useReactFlow<Node<PhoneData>>();
 
-      return parsePhoneNumber(action);
-    },
-    parsePhoneNumber(props.data.phone ?? ""),
-  );
+  const infogaScan = useInfogaScanMutation(props.data.phone!);
+  const infogaUrls = useInfogaUrlsMutation(props.data.phone!);
+
+  if (infogaScan.isSuccess) {
+    updateNode(props.id, {
+      ...props,
+      data: { ...props.data, ...infogaScan.data },
+    });
+  }
 
   return (
-    <BaseNode node={props} actions={phoneActions} className="w-[240px]">
+    <>
+      <ContextMenuSub>
+        <ContextMenuSubTrigger disabled={!props.data.phone}>
+          PhoneInfoga
+        </ContextMenuSubTrigger>
+        <ContextMenuSubContent>
+          <ContextMenuItem onClick={() => infogaScan.mutate()}>
+            Scan number
+          </ContextMenuItem>
+          <ContextMenuItem onClick={() => infogaUrls.mutate()}>
+            Search number
+          </ContextMenuItem>
+        </ContextMenuSubContent>
+      </ContextMenuSub>
+
+      <SearchExact text={props.data.phone} />
+
+      <ContextMenuItem>Extract country</ContextMenuItem>
+    </>
+  );
+}
+
+export function PhoneNumberNode(props: PhoneNode) {
+  const { updateNode } = useReactFlow<Node<PhoneData>>();
+
+  return (
+    <BaseNode
+      node={props}
+      className="w-[320px]"
+      actions={<PhoneActions {...props} />}
+    >
       <h2 className="font-semibold">PHONE NUMBER</h2>
-      <PhoneInput onChange={setNumberData} value={props.data.phone} />
-      <div>
-        <span className="font-semibold">Country:</span> {numberData?.country}
-      </div>
+      <PhoneInput
+        autoComplete="disabled-auto"
+        onChange={(value) => {
+          updateNode(props.id, {
+            ...props,
+            data: { ...props.data, phone: String(value) },
+          });
+        }}
+        value={props.data.phone}
+      />
     </BaseNode>
   );
 }

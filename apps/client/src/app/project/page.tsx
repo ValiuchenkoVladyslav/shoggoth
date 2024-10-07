@@ -1,8 +1,8 @@
 "use client";
 
 import { errorToast } from "~/components/toasts";
-import { useProject } from "~/store";
-import { useProjectGraphQuery } from "~/tauri-api/projects";
+import { useProject } from "~/projects/store";
+import { useProjectGraphQuery } from "~/projects/tauri-api";
 import { Graph } from "./_graph";
 import { GraphContextMenu } from "./_graph-context-menu";
 
