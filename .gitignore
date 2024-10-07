@@ -14,6 +14,7 @@
 
 # generated types
 apps/@shared/core/bindings/
+apps/client/src-tauri/bindings/
 
 # turborepo
 **/.turbo/
@@ -25,3 +26,6 @@ target/
 # ide
 .vscode/*
 !.vscode/settings.json
+
+# envs
+*.env*
