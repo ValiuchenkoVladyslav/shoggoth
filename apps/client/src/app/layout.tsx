@@ -22,6 +22,7 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
               <NavLink
                 href="/"
                 aliases={["/settings", "/teams", "/tools"]}
+                scroll={false}
                 className="opacity-60 hover:opacity-100 aria-[current=page]:opacity-100"
               >
                 shoggoth
