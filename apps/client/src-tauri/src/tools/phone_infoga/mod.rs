@@ -25,7 +25,7 @@ pub async fn infoga_install(app: App) -> CmdRes<()> {
   )
     .send()
     .await
-    .map_err(Into::<AnyErr>::into)?
+    .map_err(AnyErr::from)?
     .bytes_stream();
 
   let archive_path = dir.join("infoga_archive");
@@ -33,7 +33,7 @@ pub async fn infoga_install(app: App) -> CmdRes<()> {
   let mut infoga_archive = File::create(&archive_path)?;
 
   while let Some(chunk) = res_stream.next().await {
-    infoga_archive.write_all(&chunk.map_err(Into::<AnyErr>::into)?)?;
+    infoga_archive.write_all(&chunk.map_err(AnyErr::from)?)?;
   }
 
   // unpack archive
@@ -66,7 +66,7 @@ pub fn infoga_scan(app: App, phone: String) -> CmdRes<InfogaRes> {
 
   let cmd = utils::run_infoga(&app, phone).output()?;
 
-  let output_str = String::from_utf8(cmd.stdout).map_err(Into::<AnyErr>::into)?;
+  let output_str = String::from_utf8(cmd.stdout).map_err(AnyErr::from)?;
 
   let mut infoga_res = InfogaRes::default();
 
@@ -89,7 +89,7 @@ pub fn infoga_urls(app: App, phone: String) -> CmdRes<()> {
 
   let cmd = utils::run_infoga(&app, phone).output()?;
 
-  let output_str = String::from_utf8(cmd.stdout).map_err(Into::<AnyErr>::into)?;
+  let output_str = String::from_utf8(cmd.stdout).map_err(AnyErr::from)?;
 
   for col in output_str.split("\n").collect::<Vec<&str>>() {
     if col.trim().starts_with(URL_PREFIX) {
