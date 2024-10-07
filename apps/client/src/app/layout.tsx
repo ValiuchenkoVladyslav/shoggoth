@@ -1,22 +1,29 @@
-import { NavLink } from "~/components/nav-link";
+import { Slide, ToastContainer } from "react-toastify";
+import { NavLink } from "~/components/links";
+import { AppInit } from "./_app-init";
 import { ProjectTab } from "./_project-tab";
-import { QueryClientProvider } from "./_query-client";
-import WindowButtons from "./_window-buttons";
+import { ReactQueryProvider } from "./_query-client";
+import { WindowButtons } from "./_window-buttons";
 
 import "./globals.css";
-import "@xyflow/react/dist/style.css";
 
 export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <html lang="en">
       <body className="layer-dark fixed w-screen h-screen">
-        <QueryClientProvider>
+        <ReactQueryProvider>
+          <AppInit />
+
           <header
             className="flex items-center justify-between h-9 pl-3"
             data-tauri-drag-region
           >
-            <section className="flex gap-3 text-lg font-semibold *:opacity-60 hover:*:opacity-100 aria-[current=page]:*:opacity-100">
-              <NavLink href="/" aliases={["/settings", "/teams", "/tools"]}>
+            <section className="flex gap-3 text-lg font-semibold">
+              <NavLink
+                href="/"
+                aliases={["/settings", "/teams", "/tools"]}
+                className="opacity-60 hover:opacity-100 aria-[current=page]:opacity-100"
+              >
                 shoggoth
               </NavLink>
 
@@ -29,7 +36,15 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
           </header>
 
           {children}
-        </QueryClientProvider>
+        </ReactQueryProvider>
+
+        <ToastContainer
+          position="bottom-right"
+          autoClose={6000}
+          theme="dark"
+          transition={Slide}
+          closeButton={false}
+        />
       </body>
     </html>
   );

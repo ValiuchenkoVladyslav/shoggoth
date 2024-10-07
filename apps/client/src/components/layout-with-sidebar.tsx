@@ -7,15 +7,20 @@ import {
   PanelGroup,
   PanelResizeHandle,
 } from "react-resizable-panels";
+import { cn } from "~/utils";
 
 const sidebarDefaultSize = 13;
 
 let panelRef: ImperativePanelHandle | null = null;
 
+let expanded = true;
+
 if (typeof window !== "undefined") {
   window.addEventListener("keydown", (e) => {
     if (e.ctrlKey && (e.key === "s" || e.key === "ы")) {
       e.preventDefault();
+
+      expanded = !expanded;
 
       if (!panelRef?.getSize()) {
         panelRef?.expand();
@@ -53,14 +58,19 @@ export function Resizable({
         {sidebar}
       </Panel>
 
-      <PanelResizeHandle className="w-[1px] flex items-center">
-        <div className="bg-gray-800 rounded-lg translate-x-[-6px]">
+      <PanelResizeHandle className="w-0 flex items-center">
+        <div
+          className={cn(
+            "bg-gray-800 rounded-lg z-[10] outline outline-2",
+            expanded ? "translate-x-[-6px]" : "translate-x-[-4px]",
+          )}
+        >
           <GripVertical width={12} />
         </div>
       </PanelResizeHandle>
 
       <Panel
-        className="layer-light rounded-tl-md h-[calc(100vh-36px)]"
+        className="layer-light rounded-tl-md h-[calc(100vh-36px)] box-content border-l-2 border-t-2 border-white"
         defaultSize={100 - sidebarDefaultSize}
       >
         {children}

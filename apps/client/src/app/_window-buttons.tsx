@@ -11,7 +11,7 @@ if (typeof window !== "undefined") {
   });
 }
 
-export default function WindowButtons() {
+export function WindowButtons() {
   return (
     <>
       <button

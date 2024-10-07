@@ -1,6 +1,6 @@
 import { FileQuestion, Settings, Users, Wrench } from "lucide-react";
 import { Resizable } from "~/components/layout-with-sidebar";
-import { NavLink } from "~/components/nav-link";
+import { NavLink } from "~/components/links";
 
 function SidebarLink(
   props: Omit<React.ComponentProps<typeof NavLink>, "className">,
@@ -40,7 +40,7 @@ export default function Layout({ children }: React.PropsWithChildren) {
         </nav>
       }
     >
-      <div className="h-full p-3 pr-1 overflow-y-scroll">{children}</div>
+      <div className="h-full p-3 overflow-y-scroll">{children}</div>
     </Resizable>
   );
 }
