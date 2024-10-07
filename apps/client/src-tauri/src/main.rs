@@ -1,9 +1,10 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod app_dirs;
-
 mod common;
 use common::{AppDirs, Manager};
+
+mod app_dirs;
+mod commands;
 
 mod projects;
 use projects::commands as prjs;
@@ -13,8 +14,8 @@ use tools as tls;
 
 fn main() {
   tauri::Builder::default()
-    .plugin(tauri_plugin_shell::init())
     .invoke_handler(tauri::generate_handler![
+      commands::open_browser,
       prjs::get_projects,
       prjs::edit_meta,
       prjs::edit_graph,

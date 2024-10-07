@@ -1,5 +1,6 @@
 "use client";
 
+import { invoke } from "@tauri-apps/api/core";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -21,7 +22,21 @@ export function NavLink(
 
 /** external link to open in default browser  */
 export function ExternalLink(
-  props: Omit<React.LinkHTMLAttributes<HTMLAnchorElement>, "target" | "rel">,
+  props: Omit<
+    React.LinkHTMLAttributes<HTMLAnchorElement>,
+    "target" | "rel" | "onClick"
+  >,
 ) {
-  return <a target="_blank" rel="noopener noreferrer" {...props} />;
+  return (
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      // biome-ignore lint/a11y/useValidAnchor: this is a link to external resource
+      onClick={(e) => {
+        e.preventDefault();
+        invoke("open_browser", { url: props.href });
+      }}
+      {...props}
+    />
+  );
 }

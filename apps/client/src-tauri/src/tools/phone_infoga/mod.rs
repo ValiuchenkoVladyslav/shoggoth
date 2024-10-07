@@ -13,8 +13,6 @@ use tar::Archive;
 
 use crate::common::{AnyErr, App, CmdRes, Deserialize, Serialize, TS};
 
-use tauri_plugin_shell::ShellExt;
-
 #[tauri::command(rename_all = "snake_case")]
 pub async fn infoga_install(app: App) -> CmdRes<()> {
   let dir = utils::infoga_dir(&app);
@@ -95,9 +93,7 @@ pub fn infoga_urls(app: App, phone: String) -> CmdRes<()> {
 
   for col in output_str.split("\n").collect::<Vec<&str>>() {
     if col.trim().starts_with(URL_PREFIX) {
-      if let Some(url) = col.split(URL_PREFIX).last() {
-        let _ = app.shell().open(url, None);
-      }
+      col.split(URL_PREFIX).last().map(open::that);
     }
   }
 
