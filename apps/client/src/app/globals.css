@@ -11,7 +11,7 @@
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: var(--background);
     --popover-foreground: 210 40% 98%;
     --primary: 0 100% 100%;
     --primary-foreground: 222.2 47.4% 11.2%;
@@ -19,7 +19,7 @@
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 0 0% 15%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
@@ -41,6 +41,32 @@
   .layer-light {
     @apply !bg-white !text-black;
   }
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+  @apply w-[10px];
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-input rounded-lg;
+
+  &:hover {
+    @apply cursor-pointer;
+  }
+}
+
+::-webkit-scrollbar-corner {
+  @apply opacity-0;
+}
+
+/* cmdk overwrites */
+[cmdk-input-wrapper] {
+  @apply !border-b-0;
 }
 
 /* reactflow overwrites */
