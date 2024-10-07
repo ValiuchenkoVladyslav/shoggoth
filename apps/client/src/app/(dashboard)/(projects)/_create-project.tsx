@@ -14,7 +14,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import type { ProjectBase } from "~/gen/ProjectBase";
-import { useCreateProjectMutation } from "~/tauri-api/projects";
+import { useCreateProjectMutation } from "~/projects/tauri-api";
 
 export function CreateProject() {
   const [isOpen, setIsOpen] = useState(false);

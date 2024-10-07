@@ -9,7 +9,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import type { ProjectMeta } from "~/gen/ProjectMeta";
-import { useEditProjectMetaMutation } from "~/tauri-api/projects";
+import { useEditProjectMetaMutation } from "~/projects/tauri-api";
 
 type EditInputs = Pick<ProjectMeta, "name" | "desc">;
 

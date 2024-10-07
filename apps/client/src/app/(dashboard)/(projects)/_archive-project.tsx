@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "~/components/ui/dialog";
 import type { ProjectMeta } from "~/gen/ProjectMeta";
-import { useEditProjectMetaMutation } from "~/tauri-api/projects";
+import { useEditProjectMetaMutation } from "~/projects/tauri-api";
 
 export function ArchiveProject(props: ProjectMeta) {
   const editProjectMeta = useEditProjectMetaMutation();

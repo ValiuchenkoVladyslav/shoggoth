@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useProjectsQuery } from "~/tauri-api/projects";
+import { useProjectsQuery } from "~/projects/tauri-api";
 import { CreateProject } from "./_create-project";
 import { ProjectCard } from "./_project-card";
 import { ProjectFilter, ProjectFilterSelect } from "./_project-filter-select";

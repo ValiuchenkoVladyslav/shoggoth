@@ -10,7 +10,7 @@ import {
 } from "~/components/ui/context-menu";
 import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
 import type { ProjectMeta } from "~/gen/ProjectMeta";
-import { useProject } from "~/store";
+import { useProject } from "~/projects/store";
 import { cn } from "~/utils";
 import { ArchiveProject } from "./_archive-project";
 import { DeleteProject } from "./_delete-project";
