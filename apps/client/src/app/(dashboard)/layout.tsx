@@ -17,8 +17,8 @@ export default function Layout({ children }: React.PropsWithChildren) {
   return (
     <Resizable
       sidebar={
-        <nav className="h-full flex flex-col justify-between font-medium">
-          <div className="flex flex-col gap-2">
+        <nav className="h-full flexcol justify-between font-medium">
+          <div className="flexcol gap-2">
             <SidebarLink href="/">
               <FileQuestion />
               PROJECTS

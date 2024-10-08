@@ -29,7 +29,10 @@ const AccordionTrigger = React.forwardRef<
       {...props}
     >
       <div className="hover:cursor-pointer select-none">
-        <ChevronDown className="h-6 w-6 shrink-0 transition-transform duration-200" />
+        <ChevronDown
+          strokeWidth="3px"
+          className="h-6 w-6 shrink-0 transition-transform duration-200"
+        />
         {children}
       </div>
     </AccordionPrimitive.Trigger>

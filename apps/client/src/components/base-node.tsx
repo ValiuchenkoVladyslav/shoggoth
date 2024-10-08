@@ -47,7 +47,7 @@ export function BaseNode<T extends NodeProps>(
       <NodeContextMenu node={props.node} actions={props.actions}>
         <article
           className={cn(
-            "flex flex-col items-start gap-2 min-w-52 p-3 rounded-lg text-left layer-dark *:w-full",
+            "flexcol items-start gap-2 min-w-52 p-3 rounded-lg text-left layer-dark *:w-full",
             props.className,
           )}
         >

@@ -3,7 +3,7 @@ import { Sherlock } from "./_sherlock";
 
 export default function ToolsPage() {
   return (
-    <section className="flex flex-col gap-2">
+    <section className="flexcol gap-2">
       <PhoneInfoga />
       <Sherlock />
     </section>

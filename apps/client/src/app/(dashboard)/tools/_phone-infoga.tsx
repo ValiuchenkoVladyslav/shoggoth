@@ -31,9 +31,7 @@ export function PhoneInfoga() {
     <ToolSection
       headingLeft={
         <div className="flex gap-2 items-center">
-          <h1>
-            PhoneInfoga (Information gathering framework for phone numbers)
-          </h1>
+          <h1>PhoneInfoga (Phone number lookup)</h1>
 
           <ExternalLink
             className="font-bold text-xl hover:underline text-white/75 hover:text-white"
@@ -56,7 +54,7 @@ export function PhoneInfoga() {
         </Button>
       }
     >
-      <section className="flex flex-col gap-4">
+      <section className="flexcol gap-4">
         <div>
           <h2 className="text-xl font-semibold">Optional settings</h2>
           <ExternalLink
@@ -67,14 +65,14 @@ export function PhoneInfoga() {
           </ExternalLink>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flexcol gap-2">
           <h3 className="text-base font-semibold">
             Numverify API (free 100 reqs/month; no cc required)
           </h3>
           <Input placeholder="NUMVERIFY_API_KEY" />
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flexcol gap-2">
           <h3 className="text-base font-semibold">Googlecse</h3>
           <Input placeholder="GOOGLECSE_CX" />
           <Input placeholder="GOOGLE_API_KEY" />

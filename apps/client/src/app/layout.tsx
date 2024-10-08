@@ -15,7 +15,7 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
           <AppInit />
 
           <header
-            className="flex items-center justify-between h-9 pl-3"
+            className="flex items-center justify-between pl-3"
             data-tauri-drag-region
           >
             <section className="flex gap-3 text-lg font-semibold">
@@ -31,7 +31,7 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
               <ProjectTab />
             </section>
 
-            <menu className="flex *:grid *:place-content-center *:w-10 *:h-9">
+            <menu className="flex *:grid *:place-content-center *:w-10 *:h-8">
               <WindowButtons />
             </menu>
           </header>
