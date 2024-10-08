@@ -3,7 +3,9 @@ import {
   BackgroundVariant,
   type Connection,
   Controls,
+  type FinalConnectionState,
   type Node,
+  type OnNodesChange,
   ReactFlow,
   addEdge,
   getConnectedEdges,
@@ -14,50 +16,90 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 import { useCallback } from "react";
+import { errorToast } from "~/components/toasts";
+import type { DataGraph } from "~/gen/DataGraph";
 import type { DataNode } from "~/gen/DataNode";
-import type { DataNodeEdge } from "~/gen/DataNodeEdge";
+import { useProject } from "~/projects/store";
+import { useEditProjectGraphMutation } from "~/projects/tauri-api";
 import { newId } from "~/utils";
 import { nodeTypes } from "./(nodes)";
-import { edgeTypes } from "./_graph-edges";
 
-export function Graph(props: { edges: DataNodeEdge[]; nodes: DataNode[] }) {
-  const [nodes, setNodes, onNodesChange] = useNodesState(props.nodes as Node[]);
+const graphId = "GRAPH_FLOW";
+
+let unfinishedConnection: FinalConnectionState | undefined;
+
+let autosaveTimeout: NodeJS.Timeout | undefined;
+
+export function Graph(props: DataGraph) {
+  const [nodes, _, _onNodesChange] = useNodesState(props.nodes as Node[]);
   const [edges, setEdges, onEdgesChange] = useEdgesState(props.edges);
-
-  const { screenToFlowPosition } = useReactFlow();
+  const { addEdges } = useReactFlow();
+  const editProjectGraph = useEditProjectGraphMutation();
+  const projId = useProject((state) => state.project?.id!);
 
   const onConnect = useCallback(
     (conn: Connection) => setEdges((eds) => addEdge(conn, eds)),
     [setEdges],
   );
 
-  // creates a new node if the new edge ends on blank space
-  const createNewNodeOnBlankSpace = useCallback<
-    NonNullable<React.ComponentProps<typeof ReactFlow>["onConnectEnd"]>
-  >(
-    (event, connectionState) => {
-      if (connectionState.isValid) return;
+  // AUTOSAVE
+  window.clearTimeout(autosaveTimeout);
+  autosaveTimeout = setTimeout(() => {
+    editProjectGraph.mutate({
+      id: projId,
+      graph: {
+        nodes: nodes as DataNode[],
+        edges,
+      },
+    });
+  }, 850);
 
-      const source = connectionState.fromNode!.id;
+  if (editProjectGraph.isError) {
+    errorToast("Error saving project graph!", editProjectGraph.error);
+  }
 
-      const id = newId(source.slice(-4));
+  // CREATE NEW NODE IF CONNECTION ENDED ON BLANK SPACE
+  const onNodesChange = useCallback<OnNodesChange<Node>>(
+    (nodes) => {
+      const newNode = nodes.find((node) => node.type === "add");
 
-      const { clientX, clientY } = event as MouseEvent;
+      if (newNode && unfinishedConnection?.fromNode?.id) {
+        addEdges({
+          id: newId(),
+          source: unfinishedConnection.fromNode.id,
+          target: newNode.item.id,
+        });
+      }
 
-      setNodes((nds) =>
-        nds.concat({
-          id,
-          position: screenToFlowPosition({ x: clientX, y: clientY }),
-          data: { label: `Node ${id}` },
-        }),
-      );
+      if (newNode) {
+        unfinishedConnection = undefined;
+      }
 
-      setEdges((eds) => eds.concat({ id, source, target: id }));
+      _onNodesChange(nodes);
     },
-    [screenToFlowPosition, setNodes, setEdges],
+    [_onNodesChange, addEdges],
   );
 
-  // recovers edges if a middle node is deleted
+  const onConnectEnd = useCallback<
+    NonNullable<React.ComponentProps<typeof ReactFlow>["onConnectEnd"]>
+  >((event, connectionState) => {
+    if (connectionState.isValid) return;
+
+    unfinishedConnection = connectionState;
+
+    document.getElementById(graphId)?.dispatchEvent(
+      new MouseEvent("contextmenu", {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+        clientX: (event as MouseEvent).clientX,
+        clientY: (event as MouseEvent).clientY,
+        button: 2,
+      }),
+    );
+  }, []);
+
+  // RECOVER EDGES WHEN DELETING MIDDLE NODE
   // example: A --> B --> C, delete B, recover A --> C
   const recoverEdges = useCallback<
     NonNullable<React.ComponentProps<typeof ReactFlow>["onNodesDelete"]>
@@ -90,16 +132,16 @@ export function Graph(props: { edges: DataNodeEdge[]; nodes: DataNode[] }) {
 
   return (
     <ReactFlow
+      id={graphId}
       nodes={nodes}
       edges={edges}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
-      onConnectEnd={createNewNodeOnBlankSpace}
+      onConnectEnd={onConnectEnd}
       onNodesDelete={recoverEdges}
       fitView
       proOptions={{ hideAttribution: true }}
-      edgeTypes={edgeTypes}
       nodeTypes={nodeTypes}
       deleteKeyCode="Delete"
     >
