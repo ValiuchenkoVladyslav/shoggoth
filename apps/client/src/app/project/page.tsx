@@ -4,11 +4,9 @@ import { errorToast } from "~/components/toasts";
 import { useProject } from "~/projects/store";
 import { useProjectGraphQuery } from "~/projects/tauri-api";
 import { Graph } from "./_graph";
-import { GraphContextMenu } from "./_graph-context-menu";
 
 export default function ProjectPage() {
-  const projId = useProject((state) => state.project?.id as string);
-  const projectGraph = useProjectGraphQuery(projId);
+  const projectGraph = useProjectGraphQuery(useProject((s) => s.project?.id!));
 
   if (!projectGraph.data) {
     if (projectGraph.error) {
@@ -18,9 +16,5 @@ export default function ProjectPage() {
     return null;
   }
 
-  return (
-    <GraphContextMenu>
-      <Graph {...projectGraph.data} />
-    </GraphContextMenu>
-  );
+  return <Graph {...projectGraph.data} />;
 }
