@@ -12,16 +12,18 @@ import {
   useInfogaScanMutation,
   useInfogaUrlsMutation,
 } from "~/tools/phone_infoga/tauri-api";
+import { useNewNode } from "~/utils";
 import { SearchExact } from "./_text";
 
-type PhoneData = Partial<InfogaRes> & {
-  phone?: string;
-};
+type PhoneNode = Node<
+  Partial<InfogaRes> & {
+    phone?: string;
+  }
+>;
+type PhoneNodeProps = NodeProps<PhoneNode>;
 
-type PhoneNode = NodeProps<Node<PhoneData>>;
-
-function PhoneActions(props: PhoneNode) {
-  const { updateNode } = useReactFlow<Node<PhoneData>>();
+function PhoneActions(props: PhoneNodeProps) {
+  const { updateNode } = useReactFlow<PhoneNode>();
 
   const infogaScan = useInfogaScanMutation(props.data.phone!);
   const infogaUrls = useInfogaUrlsMutation(props.data.phone!);
@@ -56,8 +58,8 @@ function PhoneActions(props: PhoneNode) {
   );
 }
 
-export function PhoneNumberNode(props: PhoneNode) {
-  const { updateNode } = useReactFlow<Node<PhoneData>>();
+export function PhoneNumberNode(props: PhoneNodeProps) {
+  const { updateNode } = useReactFlow<PhoneNode>();
 
   return (
     <BaseNode
@@ -78,4 +80,10 @@ export function PhoneNumberNode(props: PhoneNode) {
       />
     </BaseNode>
   );
+}
+
+export function CreatePhoneNode() {
+  const createNode = useNewNode("phone");
+
+  return <ContextMenuItem onClick={createNode}>Add Phone Node</ContextMenuItem>;
 }

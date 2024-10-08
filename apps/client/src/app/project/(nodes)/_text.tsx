@@ -8,12 +8,16 @@ import {
   ContextMenuSubTrigger,
 } from "~/components/ui/context-menu";
 import { Textarea } from "~/components/ui/textarea";
+import { useNewNode } from "~/utils";
 
-export function SearchExact({ text }: { text?: string }) {
+type TTextNode = Node<{ text?: string }>;
+type TextNodeProps = NodeProps<TTextNode>;
+
+export function SearchExact({ text }: TTextNode["data"]) {
   return (
     <ContextMenuSub>
       <ContextMenuSubTrigger disabled={!text}>
-        Search exact
+        Search exact text
       </ContextMenuSubTrigger>
       <ContextMenuSubContent>
         <ContextMenuItem>Google</ContextMenuItem>
@@ -26,8 +30,8 @@ export function SearchExact({ text }: { text?: string }) {
   );
 }
 
-export function TextNode(props: NodeProps<Node<{ text: string }>>) {
-  const { updateNode } = useReactFlow<Node<{ text: string }>>();
+export function TextNode(props: TextNodeProps) {
+  const { updateNode } = useReactFlow<TTextNode>();
 
   return (
     <BaseNode
@@ -48,4 +52,10 @@ export function TextNode(props: NodeProps<Node<{ text: string }>>) {
       />
     </BaseNode>
   );
+}
+
+export function CreateTextNode() {
+  const createNode = useNewNode();
+
+  return <ContextMenuItem onClick={createNode}>Add Text Node</ContextMenuItem>;
 }
