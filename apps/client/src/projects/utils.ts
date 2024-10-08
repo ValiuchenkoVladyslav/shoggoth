@@ -4,6 +4,7 @@ import type { QueryClient, Updater } from "@tanstack/react-query";
 import type { ProjectMeta } from "~/gen/ProjectMeta";
 
 export const projectsQueryKey = ["projects"] as const;
+export const projectsKey = "projects";
 
 export function setProjects(
   queryClient: QueryClient,

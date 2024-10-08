@@ -55,13 +55,11 @@ pub fn infoga_check(app: App) -> bool {
 pub struct InfogaRes {
   carrier: Option<String>,
   location: Option<String>,
-  country: Option<String>,
 }
 
 #[tauri::command(rename_all = "snake_case")]
 pub fn infoga_scan(app: App, phone: String) -> CmdRes<InfogaRes> {
   const CARRIER_PREFIX: &str = "Carrier: ";
-  const COUNTRY_PREFIX: &str = "Country: ";
   const LOCATION_PREFIX: &str = "Location: ";
 
   let cmd = utils::run_infoga(&app, phone).output()?;
@@ -75,8 +73,6 @@ pub fn infoga_scan(app: App, phone: String) -> CmdRes<InfogaRes> {
       infoga_res.carrier = col.split(CARRIER_PREFIX).last().map(Into::into);
     } else if col.starts_with(LOCATION_PREFIX) {
       infoga_res.location = col.split(LOCATION_PREFIX).last().map(Into::into);
-    } else if col.starts_with(COUNTRY_PREFIX) {
-      infoga_res.country = col.split(COUNTRY_PREFIX).last().map(Into::into);
     }
   }
 

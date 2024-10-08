@@ -10,7 +10,7 @@ export function useSherlockStatusQuery() {
     async queryFn() {
       const result = await invoke<boolean>("sherlock_check");
 
-      localStorage.setItem(sherlockStatusKey, "true");
+      localStorage.setItem(sherlockStatusKey, String(result));
 
       return result;
     },

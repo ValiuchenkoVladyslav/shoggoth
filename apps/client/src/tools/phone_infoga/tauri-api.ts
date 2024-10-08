@@ -11,7 +11,7 @@ export function useInfogaStatusQuery() {
     async queryFn() {
       const result = await invoke<boolean>("infoga_check");
 
-      localStorage.setItem(infogaStatusKey, "true");
+      localStorage.setItem(infogaStatusKey, String(result));
 
       return result;
     },
