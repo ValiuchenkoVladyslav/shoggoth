@@ -3,7 +3,7 @@ use shogg_core::{
   types::{DataGraph, ProjectBase, ProjectMeta},
 };
 
-use crate::common::{App, AppDirs, CmdRes};
+use crate::utils::{App, AppDirs, CmdRes};
 
 #[tauri::command(rename_all = "snake_case")]
 pub fn get_projects(app: App) -> CmdRes<Vec<ProjectMeta>> {

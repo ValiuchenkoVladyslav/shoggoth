@@ -1,46 +1,39 @@
 // https://github.com/sherlock-project/sherlock
 
-use crate::common::{AnyErr, CmdRes};
-use std::{os, process::Command};
+use crate::utils::{AnyErr, CmdRes};
 
+#[cfg(target_os = "windows")]
 #[tauri::command(rename_all = "snake_case")]
 pub fn sherlock_install() -> CmdRes<()> {
-  use os::windows::process::CommandExt;
-
-  Command::new("pip")
+  crate::utils::win_cmd("pip")
     .args(["install", "--user", "sherlock-project"])
-    .creation_flags(0x08000000) // CREATE_NO_WINDOW
     .spawn()?
     .wait()?;
 
   Ok(())
 }
 
+#[cfg(target_os = "windows")]
 #[tauri::command(rename_all = "snake_case")]
 pub fn sherlock_check() -> CmdRes<bool> {
-  use os::windows::process::CommandExt;
-
-  let cmd = Command::new("python")
+  let cmd = crate::utils::win_cmd("python")
     .args(["-m", "sherlock_project", "--version"])
-    .creation_flags(0x08000000) // CREATE_NO_WINDOW
     .output()?;
 
   let error_str = String::from_utf8(cmd.stderr).map_err(AnyErr::from)?;
 
   if !error_str.is_empty() {
-    return Err(AnyErr::msg(error_str).into());
+    Err(AnyErr::msg(error_str))?;
   }
 
   Ok(true)
 }
 
+#[cfg(target_os = "windows")]
 #[tauri::command(rename_all = "snake_case")]
 pub fn sherlock_search(nickname: String) -> CmdRes<()> {
-  use os::windows::process::CommandExt;
-
-  Command::new("python") // todo no file
+  crate::utils::win_cmd("python") // todo no file
     .args(["-m", "sherlock_project", &nickname, "--nsfw", "--browse"])
-    .creation_flags(0x08000000) // CREATE_NO_WINDOW
     .spawn()?;
 
   Ok(())

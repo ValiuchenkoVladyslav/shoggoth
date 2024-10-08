@@ -11,7 +11,7 @@ use flate2::read::GzDecoder;
 use futures_util::StreamExt;
 use tar::Archive;
 
-use crate::common::{AnyErr, App, CmdRes, Deserialize, Serialize, TS};
+use crate::utils::{AnyErr, App, CmdRes, Deserialize, Serialize, TS};
 
 #[tauri::command(rename_all = "snake_case")]
 pub async fn infoga_install(app: App) -> CmdRes<()> {

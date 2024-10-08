@@ -1,7 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod common;
-use common::{AppDirs, Manager};
+mod utils;
+use utils::{AppDirs, Manager};
 
 mod app_dirs;
 mod commands;
