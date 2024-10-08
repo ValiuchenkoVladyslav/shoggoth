@@ -1,5 +1,6 @@
 @import "@xyflow/react/dist/style.css";
 @import "react-toastify/dist/ReactToastify.min.css";
+@import "flag-icons/css/flag-icons.min.css";
 
 @tailwind base;
 @tailwind components;
