@@ -19,10 +19,10 @@ import { useCallback } from "react";
 import { errorToast } from "~/components/toasts";
 import type { DataGraph } from "~/gen/DataGraph";
 import type { DataNode } from "~/gen/DataNode";
+import { nodeTypes } from "~/nodes";
 import { useProject } from "~/projects/store";
 import { useEditProjectGraphMutation } from "~/projects/tauri-api";
 import { newId } from "~/utils";
-import { nodeTypes } from "./(nodes)";
 
 const graphId = "GRAPH_FLOW";
 

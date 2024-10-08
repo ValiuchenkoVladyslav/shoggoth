@@ -9,14 +9,14 @@ import {
 import { Input } from "~/components/ui/input";
 import { useSherlockSearchMutation } from "~/tools/sherlock/tauri-api";
 import { useNewNode } from "~/utils";
-import { SearchExact } from "./_text";
+import { SearchExact } from "./text";
 
-type TNicknameNode = Node<{
+type Nickname = Node<{
   nickname?: string;
 }>;
-type NicknameNodeProps = NodeProps<TNicknameNode>;
+type NicknameProps = NodeProps<Nickname>;
 
-function NicknameActions(props: NicknameNodeProps) {
+function NicknameActions(props: NicknameProps) {
   const sherlockSearch = useSherlockSearchMutation(props.data.nickname!);
 
   return (
@@ -37,8 +37,8 @@ function NicknameActions(props: NicknameNodeProps) {
   );
 }
 
-export function NicknameNode(props: NicknameNodeProps) {
-  const { updateNode } = useReactFlow<TNicknameNode>();
+export function NicknameNode(props: NicknameProps) {
+  const { updateNode } = useReactFlow<Nickname>();
 
   return (
     <BaseNode

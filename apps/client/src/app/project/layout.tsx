@@ -7,10 +7,11 @@ import {
   ContextMenuContent,
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
+import { CreateCountryNode } from "~/nodes/country";
+import { CreateNicknameNode } from "~/nodes/nickname";
+import { CreatePhoneNode } from "~/nodes/phone";
+import { CreateTextNode } from "~/nodes/text";
 import { useProject } from "~/projects/store";
-import { CreateNicknameNode } from "./(nodes)/_nickname";
-import { CreatePhoneNode } from "./(nodes)/_phone";
-import { CreateTextNode } from "./(nodes)/_text";
 
 export default function Layout(props: React.PropsWithChildren) {
   const project = useProject((state) => state.project);
@@ -26,10 +27,11 @@ export default function Layout(props: React.PropsWithChildren) {
       >
         <ContextMenu>
           <ContextMenuTrigger>{props.children}</ContextMenuTrigger>
-          <ContextMenuContent>
+          <ContextMenuContent className="font-bold">
             <CreateTextNode />
             <CreatePhoneNode />
             <CreateNicknameNode />
+            <CreateCountryNode />
           </ContextMenuContent>
         </ContextMenu>
       </Resizable>

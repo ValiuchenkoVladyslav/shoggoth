@@ -13,17 +13,17 @@ import {
   useInfogaUrlsMutation,
 } from "~/tools/phone_infoga/tauri-api";
 import { useNewNode } from "~/utils";
-import { SearchExact } from "./_text";
+import { SearchExact } from "./text";
 
-type PhoneNode = Node<
+type PhoneNumber = Node<
   Partial<InfogaRes> & {
     phone?: string;
   }
 >;
-type PhoneNodeProps = NodeProps<PhoneNode>;
+type PhoneProps = NodeProps<PhoneNumber>;
 
-function PhoneActions(props: PhoneNodeProps) {
-  const { updateNode } = useReactFlow<PhoneNode>();
+function PhoneActions(props: PhoneProps) {
+  const { updateNode } = useReactFlow<PhoneNumber>();
 
   const infogaScan = useInfogaScanMutation(props.data.phone!);
   const infogaUrls = useInfogaUrlsMutation(props.data.phone!);
@@ -53,13 +53,15 @@ function PhoneActions(props: PhoneNodeProps) {
 
       <SearchExact text={props.data.phone} />
 
-      <ContextMenuItem>Extract country</ContextMenuItem>
+      <ContextMenuItem disabled={!props.data.phone}>
+        Extract country
+      </ContextMenuItem>
     </>
   );
 }
 
-export function PhoneNumberNode(props: PhoneNodeProps) {
-  const { updateNode } = useReactFlow<PhoneNode>();
+export function PhoneNumberNode(props: PhoneProps) {
+  const { updateNode } = useReactFlow<PhoneNumber>();
 
   return (
     <BaseNode
