@@ -11,8 +11,4 @@ export default {
   },
 
   generateEtags: false,
-
-  experimental: {
-    reactCompiler: true,
-  },
 };
