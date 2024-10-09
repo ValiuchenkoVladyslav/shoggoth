@@ -19,10 +19,11 @@ import { useCreateProjectMutation } from "~/projects/tauri-api";
 export function CreateProject() {
   const [isOpen, setIsOpen] = useState(false);
   const createProject = useCreateProjectMutation();
-  const { register, handleSubmit } = useForm<ProjectBase>();
+  const { register, handleSubmit, reset } = useForm<ProjectBase>();
 
   function onSubmit(data: ProjectBase) {
     createProject.mutate(data);
+    reset();
     setIsOpen(false);
   }
 

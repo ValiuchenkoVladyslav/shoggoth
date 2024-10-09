@@ -26,7 +26,7 @@ export function NodeContextMenu<T extends NodeProps>(
       <ContextMenuTrigger>{props.children}</ContextMenuTrigger>
       <ContextMenuContent className="font-bold">
         {props.actions}
-        <ContextMenuSeparator />
+        {props.actions && <ContextMenuSeparator />}
         <ContextMenuItem
           className="text-red-600"
           onClick={() => flow.deleteElements({ nodes: [props.node] })}

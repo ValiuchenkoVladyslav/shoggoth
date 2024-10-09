@@ -29,7 +29,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             endIcon ? "pr-8" : "",
             className,
           )}
-          autoComplete="off"
+          autoComplete="one-time-code" // chromium autofill hack
           ref={ref}
           {...props}
         />
