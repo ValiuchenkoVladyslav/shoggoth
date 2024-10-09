@@ -1,18 +1,20 @@
+import dynamic from "next/dynamic";
 import { Slide, ToastContainer } from "react-toastify";
 import { NavLink } from "~/components/links";
-import { AppInit } from "./_app-init";
 import { ProjectTab } from "./_project-tab";
 import { ReactQueryProvider } from "./_query-client";
 import { WindowButtons } from "./_window-buttons";
 
 import "./globals.css";
 
+const ClientInit = dynamic(() => import("./_client-init"), { ssr: false });
+
 export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <html lang="en">
       <body className="layer-dark fixed w-screen h-screen">
         <ReactQueryProvider>
-          <AppInit />
+          <ClientInit />
 
           <header
             className="flex items-center justify-between pl-3"

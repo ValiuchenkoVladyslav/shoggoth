@@ -3,27 +3,12 @@ import { invoke } from "@tauri-apps/api/core";
 import type { DataGraph } from "~/gen/DataGraph";
 import type { ProjectBase } from "~/gen/ProjectBase";
 import type { ProjectMeta } from "~/gen/ProjectMeta";
-import { isBrowser } from "~/utils";
-import {
-  projectGraphQueryKey,
-  projectsKey,
-  projectsQueryKey,
-  setProjects,
-} from "./utils";
+import { projectGraphQueryKey, projectsQueryKey, setProjects } from "./utils";
 
 export function useProjectsQuery() {
   return useQuery({
     queryKey: projectsQueryKey,
-    async queryFn() {
-      const data = await invoke<ProjectMeta[]>("get_projects");
-
-      localStorage.setItem(projectsKey, JSON.stringify(data));
-
-      return data;
-    },
-    placeholderData: isBrowser
-      ? JSON.parse(localStorage.getItem(projectsKey) ?? "[]")
-      : [],
+    queryFn: () => invoke<ProjectMeta[]>("get_projects"),
   });
 }
 
