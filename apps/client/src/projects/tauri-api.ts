@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { invoke } from "@tauri-apps/api/core";
+import { errorToast } from "~/components/toasts";
 import type { DataGraph, ProjectBase, ProjectMeta } from "~/gen/core";
 import { projectGraphQueryKey, projectsQueryKey, setProjects } from "./utils";
 
@@ -56,6 +57,9 @@ export function useEditProjectGraphMutation() {
       queryClient.invalidateQueries({
         queryKey: projectGraphQueryKey(vars.id),
       });
+    },
+    onError(error) {
+      errorToast("Failed to save graph!", error);
     },
   });
 }

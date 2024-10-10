@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { invoke } from "@tauri-apps/api/core";
+import { errorToast } from "~/components/toasts";
 import { isBrowser } from "~/utils";
 import { sherlockQueryKey, sherlockStatusKey } from "./utils";
 
@@ -30,6 +31,9 @@ export function useSherlockInstallMutation() {
     },
     onSuccess() {
       queryClient.setQueryData(sherlockQueryKey, true);
+    },
+    onError(error) {
+      errorToast("Failed to install Sherlock!", error);
     },
   });
 }

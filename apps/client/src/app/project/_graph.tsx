@@ -16,7 +16,6 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 import { useCallback, useEffect } from "react";
-import { errorToast } from "~/components/toasts";
 import type { DataGraph, DataNode } from "~/gen/core";
 import { nodeTypes } from "~/nodes";
 import { useProject } from "~/projects/store";
@@ -55,10 +54,6 @@ export function Graph(props: DataGraph) {
       });
     }, 850);
   }, [nodes, edges, projId]);
-
-  if (editProjectGraph.error) {
-    errorToast("Error saving project graph!", editProjectGraph.error);
-  }
 
   // CREATE NEW NODE IF CONNECTION ENDED ON BLANK SPACE
   const onNodesChange = useCallback<OnNodesChange<Node>>(
