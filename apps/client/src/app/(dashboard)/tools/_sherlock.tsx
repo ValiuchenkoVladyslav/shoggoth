@@ -53,7 +53,9 @@ export function Sherlock() {
         </Button>
       }
     >
-      <h1 className="text-base text-white/75">No config requried</h1>
+      <h1 className="text-base text-yellow-600 font-semibold">
+        It's a python tool so you need python installed in order to use it!
+      </h1>
     </ToolSection>
   );
 }

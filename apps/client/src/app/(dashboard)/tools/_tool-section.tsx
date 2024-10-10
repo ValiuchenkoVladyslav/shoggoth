@@ -32,7 +32,7 @@ export function ToolSection(
             {props.headingRight}
           </div>
         </AccordionTrigger>
-        <AccordionContent className="layer-dark rounded-b-lg px-4 pt-1">
+        <AccordionContent className="layer-dark rounded-b-lg px-4">
           {props.children}
         </AccordionContent>
       </AccordionItem>
