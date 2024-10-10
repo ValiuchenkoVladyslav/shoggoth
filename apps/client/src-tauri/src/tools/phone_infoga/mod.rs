@@ -39,11 +39,11 @@ schema!(InfogaRes (Default) {
 });
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn infoga_scan(app: App, phone: &str) -> CmdRes<InfogaRes> {
+pub fn infoga_scan(app: App, envs: Vec<(String, String)>, phone: &str) -> CmdRes<InfogaRes> {
   const CARRIER_PREFIX: &str = "Carrier: ";
   const LOCATION_PREFIX: &str = "Location: ";
 
-  let cmd = utils::run_infoga(&app, phone).output()?;
+  let cmd = utils::run_infoga(&app, phone).envs(envs).output()?;
 
   let output_str = String::from_utf8(cmd.stdout).map_err(AnyErr::from)?;
 

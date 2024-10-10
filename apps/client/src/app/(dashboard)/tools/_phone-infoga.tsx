@@ -10,6 +10,13 @@ import { ExternalLink } from "~/components/links";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import {
+  googleApiKeyStr,
+  googleCSECXStr,
+  googleCSEMaxResultsStr,
+  numverifyKeyStr,
+  useInfogaEnvs,
+} from "~/tools/phone_infoga/store";
+import {
   useInfogaInstallMutation,
   useInfogaStatusQuery,
 } from "~/tools/phone_infoga/tauri-api";
@@ -18,6 +25,7 @@ import { ToolSection } from "./_tool-section";
 export function PhoneInfoga() {
   const installInfoga = useInfogaInstallMutation();
   const infogaInstalled = !!useInfogaStatusQuery().data;
+  const infogaEnvs = useInfogaEnvs();
 
   const buttonIcon = installInfoga.isPending ? (
     <LoaderCircle className="animate-spin" />
@@ -69,14 +77,34 @@ export function PhoneInfoga() {
           <h3 className="text-base font-semibold">
             Numverify API (free 100 reqs/month; no cc required)
           </h3>
-          <Input placeholder="NUMVERIFY_API_KEY" />
+          <Input
+            placeholder={numverifyKeyStr}
+            defaultValue={infogaEnvs.numverifyKey ?? ""}
+            onChange={(e) => infogaEnvs.setNumverifyKey(e.target.value)}
+          />
         </div>
 
         <div className="flexcol gap-2">
-          <h3 className="text-base font-semibold">Googlecse</h3>
-          <Input placeholder="GOOGLECSE_CX" />
-          <Input placeholder="GOOGLE_API_KEY" />
-          <Input placeholder="GOOGLECSE_MAX_RESULTS (default: 10)" />
+          <h3 className="text-base font-semibold">Google CSE</h3>
+          <Input
+            placeholder={googleCSECXStr}
+            defaultValue={infogaEnvs.googleCSECX ?? ""}
+            onChange={(e) => infogaEnvs.setGoogleCSECX(e.target.value)}
+          />
+          <Input
+            placeholder={googleApiKeyStr}
+            defaultValue={infogaEnvs.googleApiKey ?? ""}
+            onChange={(e) => infogaEnvs.setGoogleApiKey(e.target.value)}
+          />
+
+          <span>{googleCSEMaxResultsStr} (default: 10)</span>
+          <Input
+            placeholder={googleCSEMaxResultsStr}
+            defaultValue={infogaEnvs.googleCSEMaxResults ?? ""}
+            onChange={(e) =>
+              infogaEnvs.setGoogleCSEMaxResults(Number(e.target.value))
+            }
+          />
         </div>
       </section>
     </ToolSection>

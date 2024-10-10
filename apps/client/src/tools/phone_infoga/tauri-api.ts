@@ -2,6 +2,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { invoke } from "@tauri-apps/api/core";
 import type { InfogaRes } from "~/gen/tauri";
 import { isBrowser } from "~/utils";
+import {
+  googleApiKeyStr,
+  googleCSECXStr,
+  googleCSEMaxResultsStr,
+  numverifyKeyStr,
+  useInfogaEnvs,
+} from "./store";
 import { infogaQueryKey, infogaStatusKey } from "./utils";
 
 /** check if {@link https://github.com/sundowndev/phoneinfoga PhoneInfoga} is installed */
@@ -36,11 +43,25 @@ export function useInfogaInstallMutation() {
 }
 
 /** scan phone number {@link https://github.com/sundowndev/phoneinfoga PhoneInfoga} */
-export function useInfogaScanMutation(phone: string) {
+export function useInfogaScanMutation(
+  phone: string,
+  onSuccess?: (data: InfogaRes) => void,
+) {
+  const envs = useInfogaEnvs();
+
   return useMutation({
     mutationFn() {
-      return invoke<InfogaRes>("infoga_scan", { phone });
+      return invoke<InfogaRes>("infoga_scan", {
+        envs: [
+          [numverifyKeyStr, envs.numverifyKey ?? ""],
+          [googleApiKeyStr, envs.googleApiKey ?? ""],
+          [googleCSECXStr, envs.googleCSECX ?? ""],
+          [googleCSEMaxResultsStr, envs.googleCSEMaxResults ?? ""],
+        ],
+        phone,
+      });
     },
+    onSuccess,
   });
 }
 
