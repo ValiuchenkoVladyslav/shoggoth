@@ -2,45 +2,28 @@
 
 mod utils;
 
-use std::{
-  fs::{self, File},
-  io::Write,
-};
-
 use flate2::read::GzDecoder;
-use futures_util::StreamExt;
 use tar::Archive;
 
 use crate::utils::{schema, AnyErr, App, CmdRes};
 
 #[tauri::command(rename_all = "snake_case")]
-pub async fn infoga_install(app: App) -> CmdRes<()> {
+pub async fn infoga_install(app: App) -> CmdRes {
   let dir = utils::infoga_dir(&app);
 
-  fs::create_dir_all(&dir)?;
+  std::fs::create_dir_all(&dir)?;
 
-  // download archive
-  let mut res_stream = reqwest::Client::new().get(
+  let res_archive = reqwest::Client::new().get(
     "https://github.com/sundowndev/phoneinfoga/releases/download/v2.11.0/phoneinfoga_Windows_x86_64.tar.gz"
   )
     .send()
     .await
     .map_err(AnyErr::from)?
-    .bytes_stream();
+    .bytes()
+    .await
+    .map_err(AnyErr::from)?;
 
-  let archive_path = dir.join("infoga_archive");
-
-  let mut infoga_archive = File::create(&archive_path)?;
-
-  while let Some(chunk) = res_stream.next().await {
-    infoga_archive.write_all(&chunk.map_err(AnyErr::from)?)?;
-  }
-
-  // unpack archive
-  Archive::new(GzDecoder::new(File::open(&archive_path)?)).unpack(dir)?;
-
-  // remove archive
-  fs::remove_file(archive_path)?;
+  Archive::new(GzDecoder::new(&res_archive[..])).unpack(dir)?;
 
   Ok(())
 }
@@ -56,7 +39,7 @@ schema!(InfogaRes (Default) {
 });
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn infoga_scan(app: App, phone: String) -> CmdRes<InfogaRes> {
+pub fn infoga_scan(app: App, phone: &str) -> CmdRes<InfogaRes> {
   const CARRIER_PREFIX: &str = "Carrier: ";
   const LOCATION_PREFIX: &str = "Location: ";
 
@@ -78,7 +61,7 @@ pub fn infoga_scan(app: App, phone: String) -> CmdRes<InfogaRes> {
 }
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn infoga_urls(app: App, phone: String) -> CmdRes<()> {
+pub fn infoga_urls(app: App, phone: &str) -> CmdRes {
   const URL_PREFIX: &str = "URL: ";
 
   let cmd = utils::run_infoga(&app, phone).output()?;

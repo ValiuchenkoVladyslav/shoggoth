@@ -13,7 +13,6 @@ shogg_core.workspace = true
 reqwest = "0.12"
 flate2 = "1"
 tar = "0.4"
-futures-util = "0.3"
 open = "5"
 
 [build-dependencies]

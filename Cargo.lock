@@ -3022,7 +3022,6 @@ version = "1.0.0"
 dependencies = [
  "anyhow",
  "flate2",
- "futures-util",
  "open",
  "reqwest",
  "serde",
