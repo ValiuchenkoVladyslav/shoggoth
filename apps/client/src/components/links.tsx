@@ -1,8 +1,8 @@
 "use client";
 
-import { invoke } from "@tauri-apps/api/core";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { browse } from "~/utils";
 
 /** navigation link which gives ability to track it's state via aria-current */
 export function NavLink(
@@ -34,7 +34,7 @@ export function ExternalLink(
       // biome-ignore lint/a11y/useValidAnchor: this is a link to external resource
       onClick={(e) => {
         e.preventDefault();
-        invoke("open_browser", { url: props.href });
+        if (props.href) browse(props.href);
       }}
       {...props}
     />

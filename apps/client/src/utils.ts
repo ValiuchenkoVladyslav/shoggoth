@@ -1,3 +1,4 @@
+import { invoke } from "@tauri-apps/api/core";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -23,5 +24,13 @@ export type InferParams<T extends { setState: unknown; getState: unknown }> = [
   T,
 ];
 
-/** check if the code is running in the browser */
+/**
+ * check if the code is running in the browser
+ * @throws nextjs hydration warning if ui depends on it
+ */
 export const isBrowser = typeof window !== "undefined";
+
+/** open url in browser */
+export function browse(url: string) {
+  invoke("browse", { url });
+}
