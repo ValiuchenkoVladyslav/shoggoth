@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { invoke } from "@tauri-apps/api/core";
-import type { InfogaRes } from "~/gen/InfogaRes";
+import type { InfogaRes } from "~/gen/tauri";
 import { isBrowser } from "~/utils";
 import { infogaQueryKey, infogaStatusKey } from "./utils";
 

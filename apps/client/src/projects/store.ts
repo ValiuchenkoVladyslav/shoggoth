@@ -1,6 +1,6 @@
 import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { create } from "zustand";
-import type { ProjectMeta } from "~/gen/ProjectMeta";
+import type { ProjectMeta } from "~/gen/core";
 import type { InferParams } from "~/utils";
 
 export type OpenProject = null | ProjectMeta;

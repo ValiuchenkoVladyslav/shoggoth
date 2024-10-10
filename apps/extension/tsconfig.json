@@ -20,7 +20,8 @@
     ],
     "paths": {
       "~/*": ["./src/*"],
-      "~/gen/*": ["../@shared/core/bindings/*"]
+      "~/gen/core": ["../@shared/core/bindings"],
+      "~/gen/tauri": ["../client/src-tauri/bindings"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

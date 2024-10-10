@@ -1,8 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { invoke } from "@tauri-apps/api/core";
-import type { DataGraph } from "~/gen/DataGraph";
-import type { ProjectBase } from "~/gen/ProjectBase";
-import type { ProjectMeta } from "~/gen/ProjectMeta";
+import type { DataGraph, ProjectBase, ProjectMeta } from "~/gen/core";
 import { projectGraphQueryKey, projectsQueryKey, setProjects } from "./utils";
 
 export function useProjectsQuery() {
@@ -55,7 +53,9 @@ export function useEditProjectGraphMutation() {
       return invoke("edit_graph", vars);
     },
     onSuccess(_, vars) {
-      queryClient.setQueryData(projectGraphQueryKey(vars.id), () => vars.graph);
+      queryClient.invalidateQueries({
+        queryKey: projectGraphQueryKey(vars.id),
+      });
     },
   });
 }

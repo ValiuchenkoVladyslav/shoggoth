@@ -1,60 +1,42 @@
-use serde::{Deserialize, Serialize};
+use crate::schema;
 use serde_json::{Map, Value};
-use ts_rs::TS;
 
-#[derive(TS, Serialize, Deserialize)]
-#[ts(export)]
-pub struct ProjectBase {
-  pub name: String,
-  pub desc: String,
-  pub team_url: Option<String>,
-}
+schema!(ProjectBase {
+  name: String,
+  desc: String,
+  team_url: Option<String>,
+});
 
-#[derive(TS, Serialize, Deserialize)]
-#[ts(export)]
-pub struct ProjectMeta {
-  pub id: String,
-  pub created_at: u128,
-  pub archived: bool,
+schema!(ProjectMeta {
+  id: String,
+  created_at: u128,
+  archived: bool,
 
   #[serde(flatten)]
-  pub base: ProjectBase,
-}
+  base: ProjectBase,
+});
 
-#[derive(TS, Serialize, Deserialize)]
-#[ts(export)]
-pub struct DataNodeEdge {
-  pub id: String,
-  pub source: String,
-  pub target: String,
-}
+schema!(DataNodeEdge {
+  id: String,
+  source: String,
+  target: String,
+});
 
-#[derive(TS, Serialize, Deserialize)]
-#[ts(export)]
-pub struct NodePos {
-  pub x: f32,
-  pub y: f32,
-}
+schema!(NodePos { x: f32, y: f32 });
 
-#[derive(TS, Serialize, Deserialize)]
-#[ts(export)]
-pub struct DataNode {
-  pub id: String,
-  pub position: NodePos,
-  pub r#type: Option<String>,
-  pub data: Map<String, Value>,
-}
+schema!(DataNode {
+  id: String,
+  position: NodePos,
+  r#type: Option<String>,
+  data: Map<String, Value>,
+});
 
-#[derive(TS, Serialize, Deserialize, Default)]
-#[ts(export)]
-pub struct DataGraph {
-  pub nodes: Vec<DataNode>,
-  pub edges: Vec<DataNodeEdge>,
-}
+schema!(DataGraph (Default) {
+  nodes: Vec<DataNode>,
+  edges: Vec<DataNodeEdge>,
+});
 
-#[derive(TS, Serialize, Deserialize)]
-#[ts(export)]
-pub struct ProjectFull {
-  pub meta: ProjectMeta,
-  pub graph: DataGraph,
-}
+schema!(ProjectFull {
+  meta: ProjectMeta,
+  graph: DataGraph,
+});

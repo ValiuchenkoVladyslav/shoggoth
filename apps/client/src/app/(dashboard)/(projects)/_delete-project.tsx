@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "~/components/ui/dialog";
-import type { ProjectMeta } from "~/gen/ProjectMeta";
+import type { ProjectMeta } from "~/gen/core";
 import { useDeleteProjectMutation } from "~/projects/tauri-api";
 
 export function DeleteProject(props: Pick<ProjectMeta, "id">) {

@@ -11,7 +11,7 @@ use flate2::read::GzDecoder;
 use futures_util::StreamExt;
 use tar::Archive;
 
-use crate::utils::{AnyErr, App, CmdRes, Deserialize, Serialize, TS};
+use crate::utils::{schema, AnyErr, App, CmdRes};
 
 #[tauri::command(rename_all = "snake_case")]
 pub async fn infoga_install(app: App) -> CmdRes<()> {
@@ -50,12 +50,10 @@ pub fn infoga_check(app: App) -> bool {
   utils::infoga_path(&app).exists()
 }
 
-#[derive(Default, TS, Serialize, Deserialize)]
-#[ts(export)]
-pub struct InfogaRes {
+schema!(InfogaRes (Default) {
   carrier: Option<String>,
   location: Option<String>,
-}
+});
 
 #[tauri::command(rename_all = "snake_case")]
 pub fn infoga_scan(app: App, phone: String) -> CmdRes<InfogaRes> {

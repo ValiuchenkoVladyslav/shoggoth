@@ -9,7 +9,7 @@ import {
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
 import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
-import type { ProjectMeta } from "~/gen/ProjectMeta";
+import type { ProjectMeta } from "~/gen/core";
 import { useProject } from "~/projects/store";
 import { cn } from "~/utils";
 import { ArchiveProject } from "./_archive-project";

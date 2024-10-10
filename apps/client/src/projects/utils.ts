@@ -1,5 +1,5 @@
 import type { QueryClient, Updater } from "@tanstack/react-query";
-import type { ProjectMeta } from "~/gen/ProjectMeta";
+import type { ProjectMeta } from "~/gen/core";
 
 export const projectsQueryKey = ["projects"] as const;
 

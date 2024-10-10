@@ -13,7 +13,7 @@ import {
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
-import type { ProjectBase } from "~/gen/ProjectBase";
+import type { ProjectBase } from "~/gen/core";
 import { useCreateProjectMutation } from "~/projects/tauri-api";
 
 export function CreateProject() {
