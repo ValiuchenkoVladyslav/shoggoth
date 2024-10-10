@@ -15,10 +15,9 @@ import {
   useNodesState,
   useReactFlow,
 } from "@xyflow/react";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { errorToast } from "~/components/toasts";
-import type { DataGraph } from "~/gen/DataGraph";
-import type { DataNode } from "~/gen/DataNode";
+import type { DataGraph, DataNode } from "~/gen/core";
 import { nodeTypes } from "~/nodes";
 import { useProject } from "~/projects/store";
 import { useEditProjectGraphMutation } from "~/projects/tauri-api";
@@ -43,18 +42,21 @@ export function Graph(props: DataGraph) {
   );
 
   // AUTOSAVE
-  window.clearTimeout(autosaveTimeout);
-  autosaveTimeout = setTimeout(() => {
-    editProjectGraph.mutate({
-      id: projId,
-      graph: {
-        nodes: nodes as DataNode[],
-        edges,
-      },
-    });
-  }, 850);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: subscribing to editProjectGraph will cause infinite loop
+  useEffect(() => {
+    window.clearTimeout(autosaveTimeout);
+    autosaveTimeout = setTimeout(() => {
+      editProjectGraph.mutate({
+        id: projId,
+        graph: {
+          nodes: nodes as DataNode[],
+          edges,
+        },
+      });
+    }, 850);
+  }, [nodes, edges, projId]);
 
-  if (editProjectGraph.isError) {
+  if (editProjectGraph.error) {
     errorToast("Error saving project graph!", editProjectGraph.error);
   }
 
