@@ -9,7 +9,7 @@ import {
 } from "~/components/ui/context-menu";
 import { CreateCountryNode } from "~/nodes/country";
 import { CreateNicknameNode } from "~/nodes/nickname";
-import { CreatePhoneNode } from "~/nodes/phone";
+import { CreatePhoneNode } from "~/nodes/phone/node";
 import { CreateTextNode } from "~/nodes/text";
 import { useProject } from "~/projects/store";
 
