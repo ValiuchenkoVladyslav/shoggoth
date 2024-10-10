@@ -15,7 +15,7 @@ use tools as tls;
 fn main() {
   tauri::Builder::default()
     .invoke_handler(tauri::generate_handler![
-      commands::open_browser,
+      commands::browse,
       prjs::get_projects,
       prjs::edit_meta,
       prjs::edit_graph,

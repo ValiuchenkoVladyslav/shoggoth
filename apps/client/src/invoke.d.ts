@@ -1,5 +1,5 @@
 type TauriCmd =
-  | "open_browser"
+  | "browse"
   | "sherlock_install"
   | "sherlock_check"
   | "sherlock_search"
