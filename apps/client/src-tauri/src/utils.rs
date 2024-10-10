@@ -1,5 +1,5 @@
 // re-export common imports
-pub use tauri::{AppHandle as App, Manager, Result as CmdRes};
+pub use tauri::{AppHandle as App, Manager};
 
 pub use crate::app_dirs::AppDirs;
 
@@ -19,3 +19,6 @@ pub fn win_cmd(cmd: impl AsRef<OsStr>) -> Command {
 
   cmd
 }
+
+/// tauri command return utility type
+pub type CmdRes<T = ()> = tauri::Result<T>;

@@ -4,7 +4,7 @@ use crate::utils::{AnyErr, CmdRes};
 
 #[cfg(target_os = "windows")]
 #[tauri::command(rename_all = "snake_case")]
-pub fn sherlock_install() -> CmdRes<()> {
+pub fn sherlock_install() -> CmdRes {
   crate::utils::win_cmd("pip")
     .args(["install", "--user", "sherlock-project"])
     .spawn()?
@@ -31,9 +31,9 @@ pub fn sherlock_check() -> CmdRes<bool> {
 
 #[cfg(target_os = "windows")]
 #[tauri::command(rename_all = "snake_case")]
-pub fn sherlock_search(nickname: String) -> CmdRes<()> {
+pub fn sherlock_search(nickname: &str) -> CmdRes {
   crate::utils::win_cmd("python") // todo no file
-    .args(["-m", "sherlock_project", &nickname, "--nsfw", "--browse"])
+    .args(["-m", "sherlock_project", nickname, "--nsfw", "--browse"])
     .spawn()?;
 
   Ok(())

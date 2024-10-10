@@ -11,10 +11,10 @@ pub fn infoga_path(app: &App) -> PathBuf {
 }
 
 #[cfg(target_os = "windows")]
-pub fn run_infoga(app: &App, phone: String) -> Command {
+pub fn run_infoga(app: &App, phone: &str) -> Command {
   let mut cmd = crate::utils::win_cmd(infoga_path(app));
 
-  cmd.args(["scan", "-n", &phone]);
+  cmd.args(["scan", "-n", phone]);
 
   cmd
 }

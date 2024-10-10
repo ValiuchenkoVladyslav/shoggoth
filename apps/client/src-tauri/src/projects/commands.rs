@@ -11,12 +11,12 @@ pub fn get_projects(app: App) -> CmdRes<Vec<ProjectMeta>> {
 }
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn edit_meta(app: App, meta: ProjectMeta) -> CmdRes<()> {
+pub fn edit_meta(app: App, meta: ProjectMeta) -> CmdRes {
   Ok(projects::write_meta(app.projects_dir(), meta)?)
 }
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn edit_graph(app: App, id: &str, graph: DataGraph) -> CmdRes<()> {
+pub fn edit_graph(app: App, id: &str, graph: DataGraph) -> CmdRes {
   Ok(projects::write_graph(app.projects_dir(), id, graph)?)
 }
 
@@ -31,6 +31,6 @@ pub fn create_project(app: App, project_base: ProjectBase) -> CmdRes<ProjectMeta
 }
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn delete_project(app: App, id: &str) -> CmdRes<()> {
+pub fn delete_project(app: App, id: &str) -> CmdRes {
   Ok(projects::delete_project(app.projects_dir(), id)?)
 }
