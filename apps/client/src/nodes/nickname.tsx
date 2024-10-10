@@ -8,8 +8,8 @@ import {
 } from "~/components/ui/context-menu";
 import { Input } from "~/components/ui/input";
 import { useSherlockSearchMutation } from "~/tools/sherlock/tauri-api";
-import { useNewNode } from "~/utils";
 import { SearchExact } from "./text";
+import { useNewNode } from "./utils";
 
 type Nickname = Node<{
   nickname?: string;
