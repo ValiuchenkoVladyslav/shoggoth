@@ -2,10 +2,11 @@
 
 import type { Webview } from "@tauri-apps/api/webview";
 import { Maximize, X } from "lucide-react";
+import { isBrowser } from "~/utils";
 
 let appWindow: Webview | null = null;
 
-if (typeof window !== "undefined") {
+if (isBrowser) {
   import("@tauri-apps/api/webview").then((windowApi) => {
     appWindow = windowApi.getCurrentWebview();
   });

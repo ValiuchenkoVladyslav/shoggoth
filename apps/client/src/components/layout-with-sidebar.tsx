@@ -7,7 +7,7 @@ import {
   PanelGroup,
   PanelResizeHandle,
 } from "react-resizable-panels";
-import { cn } from "~/utils";
+import { cn, isBrowser } from "~/utils";
 
 const sidebarDefaultSize = 13;
 
@@ -15,7 +15,7 @@ let panelRef: ImperativePanelHandle | null = null;
 
 let expanded = true;
 
-if (typeof window !== "undefined") {
+if (isBrowser) {
   window.addEventListener("keydown", (e) => {
     if (e.ctrlKey && (e.key === "s" || e.key === "ы")) {
       e.preventDefault();
