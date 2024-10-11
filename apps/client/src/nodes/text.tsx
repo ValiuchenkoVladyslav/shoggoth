@@ -1,4 +1,5 @@
 import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
+import { useRef } from "react";
 import { BaseNode } from "~/components/base-node";
 import {
   ContextMenuItem,
@@ -108,8 +109,25 @@ export function SearchExact({ text }: Text["data"]) {
   );
 }
 
+let timer: NodeJS.Timeout | undefined;
+
 export function TextNode(props: TextProps) {
   const { updateNode } = useReactFlow<Text>();
+  const textarea = useRef<HTMLTextAreaElement>(null);
+
+  if (textarea.current) {
+    const resizeObserver = new ResizeObserver(() => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        updateNode(props.id, {
+          ...props,
+          height: undefined, // force reactflow to recalculate height
+        });
+      }, 100);
+    });
+
+    resizeObserver.observe(textarea.current);
+  }
 
   return (
     <BaseNode
@@ -119,8 +137,9 @@ export function TextNode(props: TextProps) {
     >
       <h2 className="font-semibold text-base">TEXT</h2>
       <Textarea
+        ref={textarea}
         defaultValue={props.data.text}
-        className="h-[7lh] resize-none"
+        className="min-h-[3lh] h-[7lh]"
         onChange={(e) => {
           updateNode(props.id, {
             ...props,
