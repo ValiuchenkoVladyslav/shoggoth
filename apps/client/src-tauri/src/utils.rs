@@ -7,9 +7,9 @@ pub use anyhow::Error as AnyErr;
 
 pub use shogg_core::schema;
 
-// windows utility
 use std::{ffi::OsStr, os, process::Command};
 
+/// windows utility to create command without opening cmd window
 #[cfg(target_os = "windows")]
 pub fn win_cmd(cmd: impl AsRef<OsStr>) -> Command {
   use os::windows::process::CommandExt;

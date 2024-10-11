@@ -13,9 +13,14 @@ pub async fn infoga_install(app: App) -> CmdRes {
 
   std::fs::create_dir_all(&dir)?;
 
-  let res_archive = reqwest::Client::new().get(
+  let download_url = if cfg!(target_os = "windows") {
     "https://github.com/sundowndev/phoneinfoga/releases/download/v2.11.0/phoneinfoga_Windows_x86_64.tar.gz"
-  )
+  } else {
+    "https://github.com/sundowndev/phoneinfoga/releases/download/v2.11.0/phoneinfoga_Linux_x86_64.tar.gz"
+  };
+
+  let res_archive = reqwest::Client::new()
+    .get(download_url)
     .send()
     .await
     .map_err(AnyErr::from)?
