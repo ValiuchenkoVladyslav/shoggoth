@@ -4,11 +4,11 @@
 /// you can also add custom derives by passing them as a tuple after schema name
 /// ### Usage
 /// ```rust
-/// schema!(SchemaName {
+/// shogg_core::schema!(SchemaName {
 ///   field1: String,
 /// });
 ///
-/// schema!(WithAdditionalDerives (Default) {
+/// shogg_core::schema!(WithAdditionalDerives (Default) {
 ///   field1: String,
 /// });
 /// ```
