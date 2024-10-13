@@ -1,4 +1,5 @@
 import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
+import { AtSign } from "lucide-react";
 import { BaseNode } from "~/components/base-node";
 import {
   ContextMenuItem,
@@ -46,7 +47,10 @@ export function NicknameNode(props: NicknameProps) {
       className="w-[320px]"
       actions={<NicknameActions {...props} />}
     >
-      <h2 className="font-semibold">NICKNAME</h2>
+      <h2 className="font-semibold flex gap-2">
+        <AtSign width={18} />
+        NICKNAME
+      </h2>
       <Input
         autoComplete="disabled-auto"
         defaultValue={props.data.nickname}
@@ -65,6 +69,9 @@ export function CreateNicknameNode() {
   const createNode = useNewNode("nickname");
 
   return (
-    <ContextMenuItem onClick={createNode}>Add Nickname node</ContextMenuItem>
+    <ContextMenuItem onClick={createNode} className="gap-2">
+      <AtSign width={18} />
+      Add Nickname node
+    </ContextMenuItem>
   );
 }

@@ -1,4 +1,5 @@
 import type { Node, NodeProps } from "@xyflow/react";
+import { Flag } from "lucide-react";
 import { BaseNode } from "~/components/base-node";
 import { ContextMenuItem } from "~/components/ui/context-menu";
 import { cn } from "~/utils";
@@ -38,6 +39,9 @@ export function CreateCountryNode() {
   const createNode = useNewNode("country");
 
   return (
-    <ContextMenuItem onClick={createNode}>Add Country node</ContextMenuItem>
+    <ContextMenuItem onClick={createNode} className="gap-2">
+      <Flag width={17} />
+      Add Country node
+    </ContextMenuItem>
   );
 }

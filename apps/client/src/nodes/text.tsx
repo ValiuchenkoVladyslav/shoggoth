@@ -1,4 +1,5 @@
 import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
+import { Text as TextIcon } from "lucide-react";
 import { useRef } from "react";
 import { BaseNode } from "~/components/base-node";
 import {
@@ -135,7 +136,10 @@ export function TextNode(props: TextProps) {
       className="w-[340px]"
       actions={<SearchExact text={props.data.text} />}
     >
-      <h2 className="font-semibold text-base">TEXT</h2>
+      <h2 className="font-semibold text-base flex gap-2">
+        <TextIcon width={18} />
+        TEXT
+      </h2>
       <Textarea
         ref={textarea}
         defaultValue={props.data.text}
@@ -154,5 +158,10 @@ export function TextNode(props: TextProps) {
 export function CreateTextNode() {
   const createNode = useNewNode();
 
-  return <ContextMenuItem onClick={createNode}>Add Text Node</ContextMenuItem>;
+  return (
+    <ContextMenuItem onClick={createNode} className="gap-2">
+      <TextIcon width={18} />
+      Add Text Node
+    </ContextMenuItem>
+  );
 }

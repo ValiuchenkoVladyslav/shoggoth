@@ -1,4 +1,5 @@
 import { useReactFlow } from "@xyflow/react";
+import { Phone } from "lucide-react";
 import { BaseNode } from "~/components/base-node";
 import { ContextMenuItem } from "~/components/ui/context-menu";
 import { PhoneInput } from "~/components/ui/phone-input";
@@ -38,7 +39,10 @@ export function PhoneNumberNode(props: PhoneProps) {
       className="w-[320px]"
       actions={<PhoneActions {...props} />}
     >
-      <h2 className="font-semibold">PHONE NUMBER</h2>
+      <h2 className="font-semibold flex gap-2">
+        <Phone width={18} />
+        PHONE NUMBER
+      </h2>
       <PhoneInput
         autoComplete="disabled-auto"
         onChange={(value) => {
@@ -60,5 +64,10 @@ export function PhoneNumberNode(props: PhoneProps) {
 export function CreatePhoneNode() {
   const createNode = useNewNode("phone");
 
-  return <ContextMenuItem onClick={createNode}>Add Phone Node</ContextMenuItem>;
+  return (
+    <ContextMenuItem onClick={createNode} className="gap-2">
+      <Phone width={18} />
+      Add Phone Node
+    </ContextMenuItem>
+  );
 }
