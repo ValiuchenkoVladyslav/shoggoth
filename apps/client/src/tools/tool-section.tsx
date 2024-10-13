@@ -9,6 +9,7 @@ import {
 } from "~/components/ui/accordion";
 import { cn } from "~/utils";
 
+/** config section for tool in /tools page */
 export function ToolSection(
   props: React.PropsWithChildren<{
     headingLeft: React.ReactNode;

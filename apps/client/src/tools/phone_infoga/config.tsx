@@ -9,18 +9,15 @@ import {
 import { ExternalLink } from "~/components/links";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { ToolSection } from "../tool-section";
 import {
   googleApiKeyStr,
   googleCSECXStr,
   googleCSEMaxResultsStr,
   numverifyKeyStr,
   useInfogaEnvs,
-} from "~/tools/phone_infoga/store";
-import {
-  useInfogaInstallMutation,
-  useInfogaStatusQuery,
-} from "~/tools/phone_infoga/tauri-api";
-import { ToolSection } from "./_tool-section";
+} from "./store";
+import { useInfogaInstallMutation, useInfogaStatusQuery } from "./tauri-api";
 
 export function PhoneInfoga() {
   const installInfoga = useInfogaInstallMutation();
@@ -42,7 +39,7 @@ export function PhoneInfoga() {
           <h1>PhoneInfoga (Phone number lookup)</h1>
 
           <ExternalLink
-            className="font-bold text-xl hover:underline text-white/75 hover:text-white"
+            className="font-bold text-white/75 hover:text-white"
             href="https://github.com/sundowndev/phoneinfoga"
           >
             <ExternalLinkIcon />

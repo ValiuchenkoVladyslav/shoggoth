@@ -12,7 +12,7 @@ import {
   useSherlockInstallMutation,
   useSherlockStatusQuery,
 } from "~/tools/sherlock/tauri-api";
-import { ToolSection } from "./_tool-section";
+import { ToolSection } from "../tool-section";
 
 export function Sherlock() {
   const installSherlock = useSherlockInstallMutation();
