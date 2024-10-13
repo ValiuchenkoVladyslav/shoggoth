@@ -1,4 +1,4 @@
-use crate::utils::{self, App, AppDirs};
+use crate::utils::{cmd, App, AppDirs};
 use std::{path::PathBuf, process::Command};
 
 pub fn infoga_dir(app: &App) -> PathBuf {
@@ -6,19 +6,15 @@ pub fn infoga_dir(app: &App) -> PathBuf {
 }
 
 pub fn infoga_path(app: &App) -> PathBuf {
-  if cfg!(target_os = "windows") {
-    infoga_dir(app).join("phoneinfoga.exe")
-  } else {
-    infoga_dir(app).join("phoneinfoga")
-  }
+  #[cfg(target_os = "windows")]
+  return infoga_dir(app).join("phoneinfoga.exe");
+
+  #[cfg(not(target_os = "windows"))]
+  return infoga_dir(app).join("phoneinfoga");
 }
 
 pub fn run_infoga(app: &App, phone: &str) -> Command {
-  let mut cmd = if cfg!(target_os = "windows") {
-    utils::win_cmd(infoga_path(app))
-  } else {
-    Command::new(infoga_path(app))
-  };
+  let mut cmd = cmd(infoga_path(app));
 
   cmd.args(["scan", "-n", phone]);
 

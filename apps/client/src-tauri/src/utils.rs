@@ -1,3 +1,5 @@
+use std::{ffi::OsStr, os, process::Command};
+
 // re-export common imports
 pub use tauri::{AppHandle as App, Manager};
 
@@ -7,18 +9,19 @@ pub use anyhow::Error as AnyErr;
 
 pub use shogg_core::schema;
 
-use std::{ffi::OsStr, os, process::Command};
+/// utility to spawn a command (it won't open a cmd on windows)
+pub fn cmd(cmd: impl AsRef<OsStr>) -> Command {
+  let mut command = Command::new(cmd);
 
-/// windows utility to create command without opening cmd window
-#[cfg(target_os = "windows")]
-pub fn win_cmd(cmd: impl AsRef<OsStr>) -> Command {
-  use os::windows::process::CommandExt;
+  #[cfg(target_os = "windows")]
+  {
+    use os::windows::process::CommandExt;
 
-  let mut cmd = Command::new(cmd);
-  cmd.creation_flags(0x08000000); // CREATE_NO_WINDOW
+    command.creation_flags(0x08000000); // CREATE_NO_WINDOW
+  }
 
-  cmd
+  command
 }
 
-/// tauri command return utility type
+/// tauri command return type
 pub type CmdRes<T = ()> = tauri::Result<T>;
