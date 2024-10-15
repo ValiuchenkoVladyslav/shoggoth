@@ -11,8 +11,8 @@ pub const PROJECT_FILE_EXT: &str = ".shogproj";
 /// get project file path
 /// * `dir` - path to projects directory. It's different on client & server
 /// * `id` - project id
-pub fn project_path(dir: impl AsRef<Path>, id: impl Into<String>) -> PathBuf {
-  dir.as_ref().join(id.into() + PROJECT_FILE_EXT)
+pub fn project_path(dir: impl AsRef<Path>, id: &str) -> PathBuf {
+  dir.as_ref().join(id.to_owned() + PROJECT_FILE_EXT)
 }
 
 /// read project data from file
