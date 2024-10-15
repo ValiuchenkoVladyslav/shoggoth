@@ -25,3 +25,8 @@ pub fn cmd(cmd: impl AsRef<OsStr>) -> Command {
 
 /// tauri command return type
 pub type CmdRes<T = ()> = tauri::Result<T>;
+
+/// `Vec<u8>` to `String`
+pub fn bytes_to_str(bytes: Vec<u8>) -> String {
+  std::str::from_utf8(&bytes).unwrap_or_default().into()
+}
