@@ -5,7 +5,7 @@ mod utils;
 use flate2::read::GzDecoder;
 use tar::Archive;
 
-use crate::utils::{schema, AnyErr, App, CmdRes};
+use crate::utils::{bytes_to_str, schema, AnyErr, App, CmdRes};
 
 #[tauri::command(rename_all = "snake_case")]
 pub async fn infoga_install(app: App) -> CmdRes {
@@ -13,14 +13,14 @@ pub async fn infoga_install(app: App) -> CmdRes {
 
   std::fs::create_dir_all(&dir)?;
 
-  let download_url = if cfg!(target_os = "windows") {
+  const DOWNLOAD_URL: &str = if cfg!(target_os = "windows") {
     "https://github.com/sundowndev/phoneinfoga/releases/download/v2.11.0/phoneinfoga_Windows_x86_64.tar.gz"
   } else {
     "https://github.com/sundowndev/phoneinfoga/releases/download/v2.11.0/phoneinfoga_Linux_x86_64.tar.gz"
   };
 
   let res_archive = reqwest::Client::new()
-    .get(download_url)
+    .get(DOWNLOAD_URL)
     .send()
     .await
     .map_err(AnyErr::from)?
@@ -44,17 +44,15 @@ schema!(InfogaRes (Default) {
 });
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn infoga_scan(app: App, envs: Vec<(String, String)>, phone: &str) -> CmdRes<InfogaRes> {
+pub fn infoga_scan(app: App, envs: [(&str, &str); 4], phone: &str) -> CmdRes<InfogaRes> {
   const CARRIER_PREFIX: &str = "Carrier: ";
   const LOCATION_PREFIX: &str = "Location: ";
 
-  let cmd = utils::run_infoga(&app, phone).envs(envs).output()?;
-
-  let output_str = String::from_utf8(cmd.stdout).map_err(AnyErr::from)?;
+  let output = utils::run_infoga(&app, phone).envs(envs).output()?;
 
   let mut infoga_res = InfogaRes::default();
 
-  for col in output_str.split("\n").collect::<Vec<&str>>() {
+  for col in bytes_to_str(output.stdout).split("\n") {
     if col.starts_with(CARRIER_PREFIX) {
       infoga_res.carrier = col.split(CARRIER_PREFIX).last().map(Into::into);
     } else if col.starts_with(LOCATION_PREFIX) {
@@ -69,11 +67,9 @@ pub fn infoga_scan(app: App, envs: Vec<(String, String)>, phone: &str) -> CmdRes
 pub fn infoga_urls(app: App, phone: &str) -> CmdRes {
   const URL_PREFIX: &str = "URL: ";
 
-  let cmd = utils::run_infoga(&app, phone).output()?;
+  let output = utils::run_infoga(&app, phone).output()?;
 
-  let output_str = String::from_utf8(cmd.stdout).map_err(AnyErr::from)?;
-
-  for col in output_str.split("\n").collect::<Vec<&str>>() {
+  for col in bytes_to_str(output.stdout).split("\n") {
     if col.trim().starts_with(URL_PREFIX) {
       col.split(URL_PREFIX).last().map(open::that);
     }
