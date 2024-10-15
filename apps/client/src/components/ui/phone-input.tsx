@@ -42,6 +42,7 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
           flagComponent={FlagComponent}
           countrySelectComponent={CountrySelect}
           inputComponent={InputComponent}
+          autoComplete="one-time-code"
           /**
            * Handles the onChange event.
            *
