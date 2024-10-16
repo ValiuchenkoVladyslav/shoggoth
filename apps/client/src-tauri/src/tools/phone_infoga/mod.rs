@@ -44,11 +44,11 @@ schema!(InfogaRes (Default) {
 });
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn infoga_scan(app: App, envs: [(&str, &str); 4], phone: &str) -> CmdRes<InfogaRes> {
+pub async fn infoga_scan(app: App, envs: [(&str, &str); 4], phone: &str) -> CmdRes<InfogaRes> {
   const CARRIER_PREFIX: &str = "Carrier: ";
   const LOCATION_PREFIX: &str = "Location: ";
 
-  let output = utils::run_infoga(&app, phone).envs(envs).output()?;
+  let output = utils::run_infoga(&app, phone).envs(envs).output().await?;
 
   let mut infoga_res = InfogaRes::default();
 
@@ -64,10 +64,10 @@ pub fn infoga_scan(app: App, envs: [(&str, &str); 4], phone: &str) -> CmdRes<Inf
 }
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn infoga_urls(app: App, phone: &str) -> CmdRes {
+pub async fn infoga_urls(app: App, phone: &str) -> CmdRes {
   const URL_PREFIX: &str = "URL: ";
 
-  let output = utils::run_infoga(&app, phone).output()?;
+  let output = utils::run_infoga(&app, phone).output().await?;
 
   for col in bytes_to_str(output.stdout).split("\n") {
     if col.trim().starts_with(URL_PREFIX) {

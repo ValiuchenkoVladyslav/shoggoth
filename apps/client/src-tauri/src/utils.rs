@@ -1,4 +1,5 @@
-use std::{ffi::OsStr, os, process::Command};
+use std::ffi::OsStr;
+use tokio::process::Command;
 
 // re-export common imports
 pub use tauri::{AppHandle as App, Manager};
@@ -14,11 +15,7 @@ pub fn cmd(cmd: impl AsRef<OsStr>) -> Command {
   let mut command = Command::new(cmd);
 
   #[cfg(target_os = "windows")]
-  {
-    use os::windows::process::CommandExt;
-
-    command.creation_flags(0x08000000); // CREATE_NO_WINDOW
-  }
+  command.creation_flags(0x08000000); // CREATE_NO_WINDOW
 
   command
 }

@@ -3,11 +3,12 @@
 use crate::utils::{bytes_to_str, cmd, AnyErr, CmdRes};
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn sherlock_install() -> CmdRes {
+pub async fn sherlock_install() -> CmdRes {
   cmd("pipx")
     .args(["install", "sherlock-project"])
     .spawn()?
-    .wait()?;
+    .wait()
+    .await?;
 
   Ok(())
 }
@@ -15,8 +16,8 @@ pub fn sherlock_install() -> CmdRes {
 const APP_CMD: &str = "sherlock";
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn sherlock_check() -> CmdRes<bool> {
-  let output = cmd(APP_CMD).arg("--version").output()?;
+pub async fn sherlock_check() -> CmdRes<bool> {
+  let output = cmd(APP_CMD).arg("--version").output().await?;
 
   let error_str = bytes_to_str(output.stderr);
 
