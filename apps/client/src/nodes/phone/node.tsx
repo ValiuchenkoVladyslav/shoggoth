@@ -1,11 +1,8 @@
 import { useReactFlow } from "@xyflow/react";
 import { Phone } from "lucide-react";
-import { BaseNode } from "~/components/base-node";
-import { ContextMenuItem } from "~/components/ui/context-menu";
 import { PhoneInput } from "~/components/ui/phone-input";
-import { useNewNode } from "../utils";
-import { PhoneActions } from "./actions";
-import type { PhoneNumber, PhoneProps } from "./types";
+import { BaseNode, createNode } from "../utils";
+import { PhoneActions, type PhoneNumber, type PhoneProps } from "./actions";
 
 function PhoneCarrier(props: Pick<PhoneProps["data"], "carrier">) {
   if (!props.carrier) return null;
@@ -29,45 +26,43 @@ function PhoneLocation(props: Pick<PhoneProps["data"], "location">) {
   );
 }
 
-export function PhoneNumberNode(props: PhoneProps) {
-  const { updateNode } = useReactFlow<PhoneNumber>();
-  const data = props.data;
-
-  return (
-    <BaseNode
-      node={props}
-      className="w-[320px]"
-      actions={<PhoneActions {...props} />}
-    >
-      <h2 className="font-semibold flex gap-2">
-        <Phone width={18} />
-        PHONE NUMBER
-      </h2>
-      <PhoneInput
-        autoComplete="disabled-auto"
-        onChange={(value) => {
-          updateNode(props.id, {
-            ...props,
-            data: { ...data, phone: String(value) },
-          });
-        }}
-        value={data.phone}
-      />
-
-      <PhoneCarrier carrier={data.carrier} />
-
-      <PhoneLocation location={data.location} />
-    </BaseNode>
-  );
+export function phoneInit(phone?: string) {
+  return { phone };
 }
 
-export function CreatePhoneNode() {
-  const createNode = useNewNode("phone");
+export const phone = createNode<PhoneNumber["data"], typeof phoneInit>({
+  icon: <Phone width={17} />,
+  type: "phone",
+  initFn: phoneInit,
+  graphNode(props) {
+    const { updateNode } = useReactFlow<PhoneNumber>();
+    const data = props.data;
 
-  return (
-    <ContextMenuItem onClick={createNode} className="gap-2">
-      <Phone width={18} />
-      Add Phone Node
-    </ContextMenuItem>
-  );
-}
+    return (
+      <BaseNode
+        node={props}
+        className="w-[248px]"
+        actions={<PhoneActions {...props} />}
+      >
+        <h2 className="font-semibold flex gap-2">
+          <Phone width={18} />
+          PHONE NUMBER
+        </h2>
+        <PhoneInput
+          autoComplete="disabled-auto"
+          onChange={(value) => {
+            updateNode(props.id, {
+              ...props,
+              data: { ...data, phone: String(value) },
+            });
+          }}
+          value={data.phone}
+        />
+
+        <PhoneCarrier carrier={data.carrier} />
+
+        <PhoneLocation location={data.location} />
+      </BaseNode>
+    );
+  },
+});

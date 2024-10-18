@@ -1,6 +1,4 @@
-import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
 import { AtSign } from "lucide-react";
-import { BaseNode } from "~/components/base-node";
 import {
   ContextMenuItem,
   ContextMenuSub,
@@ -10,68 +8,59 @@ import {
 import { Input } from "~/components/ui/input";
 import { useSherlockSearchMutation } from "~/tools/sherlock/tauri-api";
 import { SearchExact } from "./text";
-import { useNewNode } from "./utils";
+import { BaseNode, createNode } from "./utils";
 
-type Nickname = Node<{
-  nickname?: string;
-}>;
-type NicknameProps = NodeProps<Nickname>;
-
-function NicknameActions(props: NicknameProps) {
-  const sherlockSearch = useSherlockSearchMutation(props.data.nickname!);
-
-  return (
-    <>
-      <ContextMenuSub>
-        <ContextMenuSubTrigger disabled={!props.data.nickname}>
-          Sherlock
-        </ContextMenuSubTrigger>
-        <ContextMenuSubContent>
-          <ContextMenuItem onClick={() => sherlockSearch.mutate()}>
-            Search nickname
-          </ContextMenuItem>
-        </ContextMenuSubContent>
-      </ContextMenuSub>
-
-      <SearchExact text={props.data.nickname} />
-    </>
-  );
+function nicknameInit(nickname = "") {
+  return { nickname };
 }
 
-export function NicknameNode(props: NicknameProps) {
-  const { updateNode } = useReactFlow<Nickname>();
+export const nickname = createNode<
+  {
+    nickname: string;
+  },
+  typeof nicknameInit
+>({
+  type: "nickname",
+  icon: <AtSign width={18} />,
+  initFn: nicknameInit,
+  graphNode(props) {
+    const { updateNode } = props.useReactFlow();
+    const sherlockSearch = useSherlockSearchMutation(props.data.nickname);
 
-  return (
-    <BaseNode
-      node={props}
-      className="w-[320px]"
-      actions={<NicknameActions {...props} />}
-    >
-      <h2 className="font-semibold flex gap-2">
-        <AtSign width={18} />
-        NICKNAME
-      </h2>
-      <Input
-        autoComplete="disabled-auto"
-        defaultValue={props.data.nickname}
-        onChange={(event) => {
-          updateNode(props.id, {
-            ...props,
-            data: { ...props.data, nickname: event.target.value },
-          });
-        }}
-      />
-    </BaseNode>
-  );
-}
+    return (
+      <BaseNode
+        node={props}
+        className="w-[200px]"
+        actions={[
+          <ContextMenuSub key={0}>
+            <ContextMenuSubTrigger disabled={!props.data.nickname}>
+              Sherlock
+            </ContextMenuSubTrigger>
+            <ContextMenuSubContent>
+              <ContextMenuItem onClick={() => sherlockSearch.mutate()}>
+                Search nickname
+              </ContextMenuItem>
+            </ContextMenuSubContent>
+          </ContextMenuSub>,
 
-export function CreateNicknameNode() {
-  const createNode = useNewNode("nickname");
-
-  return (
-    <ContextMenuItem onClick={createNode} className="gap-2">
-      <AtSign width={18} />
-      Add Nickname node
-    </ContextMenuItem>
-  );
-}
+          <SearchExact key={1} text={props.data.nickname} />,
+        ]}
+      >
+        <h2 className="font-semibold flex gap-2">
+          <AtSign width={18} />
+          NICKNAME
+        </h2>
+        <Input
+          autoComplete="disabled-auto"
+          defaultValue={props.data.nickname}
+          onChange={(evt) => {
+            updateNode(props.id, {
+              ...props,
+              data: { ...props.data, nickname: evt.target.value },
+            });
+          }}
+        />
+      </BaseNode>
+    );
+  },
+});

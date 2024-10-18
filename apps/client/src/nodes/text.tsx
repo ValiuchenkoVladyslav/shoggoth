@@ -1,7 +1,5 @@
-import { type Node, type NodeProps, useReactFlow } from "@xyflow/react";
 import { Text as TextIcon } from "lucide-react";
 import { useRef } from "react";
-import { BaseNode } from "~/components/base-node";
 import {
   ContextMenuItem,
   ContextMenuLabel,
@@ -15,16 +13,15 @@ import { DDGIcon } from "~/icons/ddg";
 import { GoogleIcon } from "~/icons/google";
 import { YandexIcon } from "~/icons/yandex";
 import { browse } from "~/utils";
-import { useNewNode } from "./utils";
+import { BaseNode, createNode } from "./utils";
 
-type Text = Node<{ text?: string }>;
-type TextProps = NodeProps<Text>;
+type Text = { text?: string };
 
 const googleSearch = "https://www.google.com/search?q=";
 const ddgSearch = "https://duckduckgo.com/?q=";
 const yandexSearch = "https://yandex.com/search/?text=";
 
-export function SearchExact({ text }: Text["data"]) {
+export function SearchExact({ text }: Text) {
   const searchUrl = (pref: string) => encodeURI(pref + text);
   const searchExactUrl = (pref: string) => encodeURI(pref + `"${text}"`);
 
@@ -112,56 +109,53 @@ export function SearchExact({ text }: Text["data"]) {
 
 let timer: NodeJS.Timeout | undefined;
 
-export function TextNode(props: TextProps) {
-  const { updateNode } = useReactFlow<Text>();
-  const textarea = useRef<HTMLTextAreaElement>(null);
+function textInit(text?: string) {
+  return { text };
+}
 
-  if (textarea.current) {
-    const resizeObserver = new ResizeObserver(() => {
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(() => {
-        updateNode(props.id, {
-          ...props,
-          height: undefined, // force reactflow to recalculate height
-        });
-      }, 100);
-    });
+export const text = createNode<Text, typeof textInit>({
+  icon: <TextIcon width={18} />,
+  initFn: textInit,
+  graphNode(props) {
+    const { updateNode } = props.useReactFlow();
+    const textarea = useRef<HTMLTextAreaElement>(null);
 
-    resizeObserver.observe(textarea.current);
-  }
-
-  return (
-    <BaseNode
-      node={props}
-      className="w-[340px]"
-      actions={<SearchExact text={props.data.text} />}
-    >
-      <h2 className="font-semibold text-base flex gap-2">
-        <TextIcon width={18} />
-        TEXT
-      </h2>
-      <Textarea
-        ref={textarea}
-        defaultValue={props.data.text}
-        className="min-h-[3lh] h-[7lh]"
-        onChange={(e) => {
+    if (textarea.current) {
+      const resizeObserver = new ResizeObserver(() => {
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
           updateNode(props.id, {
             ...props,
-            data: { ...props.data, text: e.target.value },
+            height: undefined, // force reactflow to recalculate height
           });
-        }}
-      />
-    </BaseNode>
-  );
-}
+        }, 100);
+      });
 
-export function CreateTextNode() {
-  const createNode = useNewNode();
+      resizeObserver.observe(textarea.current);
+    }
 
-  return (
-    <ContextMenuItem onClick={createNode} className="gap-2">
-      <TextIcon width={18} />
-      Add Text Node
-    </ContextMenuItem>
-  );
-}
+    return (
+      <BaseNode
+        node={props}
+        className="w-[340px]"
+        actions={<SearchExact text={props.data.text} />}
+      >
+        <h2 className="font-semibold text-base flex gap-2">
+          <TextIcon width={18} />
+          TEXT
+        </h2>
+        <Textarea
+          ref={textarea}
+          defaultValue={props.data.text}
+          className="min-h-[3lh] h-[7lh]"
+          onChange={(e) => {
+            updateNode(props.id, {
+              ...props,
+              data: { ...props.data, text: e.target.value },
+            });
+          }}
+        />
+      </BaseNode>
+    );
+  },
+});
