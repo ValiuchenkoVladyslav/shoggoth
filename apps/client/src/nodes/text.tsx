@@ -9,9 +9,7 @@ import {
   ContextMenuSubTrigger,
 } from "~/components/ui/context-menu";
 import { Textarea } from "~/components/ui/textarea";
-import { DDGIcon } from "~/icons/ddg";
-import { GoogleIcon } from "~/icons/google";
-import { YandexIcon } from "~/icons/yandex";
+import { DDGIcon, GoogleIcon, YandexIcon } from "~/icons/browsers";
 import { browse } from "~/utils";
 import { BaseNode, createNode } from "./utils";
 
