@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import { Slide, ToastContainer } from "react-toastify";
 import { NavLink } from "~/components/links";
+import { CatOtpRequest } from "~/tools/bellingcat_tg/cat-otp-request";
 import { ProjectTab } from "./_project-tab";
 import { ReactQueryProvider } from "./_query-client";
 import { WindowButtons } from "./_window-buttons";
@@ -48,6 +49,8 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
           transition={Slide}
           closeButton={false}
         />
+
+        <CatOtpRequest />
       </body>
     </html>
   );

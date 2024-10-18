@@ -1,5 +1,6 @@
 "use client";
 
+import { useCatTgStatusQuery } from "~/tools/bellingcat_tg/tauri-api";
 import { useInfogaStatusQuery } from "~/tools/phone_infoga/tauri-api";
 import { useSherlockStatusQuery } from "~/tools/sherlock/tauri-api";
 
@@ -19,6 +20,7 @@ export default function AppInit() {
   // prefetch tools
   useInfogaStatusQuery();
   useSherlockStatusQuery();
+  useCatTgStatusQuery();
 
   return null;
 }
