@@ -1,6 +1,6 @@
 // https://github.com/sherlock-project/sherlock
 
-use crate::utils::{bytes_to_str, cmd, AnyErr, CmdRes};
+use crate::prelude::*;
 
 #[tauri::command(rename_all = "snake_case")]
 pub async fn sherlock_install() -> CmdRes {
@@ -19,7 +19,7 @@ const APP_CMD: &str = "sherlock";
 pub async fn sherlock_check() -> CmdRes<bool> {
   let output = cmd(APP_CMD).arg("--version").output().await?;
 
-  let error_str = bytes_to_str(output.stderr);
+  let error_str = bytes_string(output.stderr);
 
   if !error_str.is_empty() {
     Err(AnyErr::msg(error_str))?;

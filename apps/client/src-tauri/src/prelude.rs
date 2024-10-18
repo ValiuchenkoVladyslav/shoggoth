@@ -8,7 +8,7 @@ pub use crate::app_dirs::AppDirs;
 
 pub use anyhow::Error as AnyErr;
 
-pub use shogg_core::schema;
+pub use shogg_core::{schema, CtxExt};
 
 /// utility to spawn a command (it won't open a cmd on windows)
 pub fn cmd(cmd: impl AsRef<OsStr>) -> Command {
@@ -24,6 +24,6 @@ pub fn cmd(cmd: impl AsRef<OsStr>) -> Command {
 pub type CmdRes<T = ()> = tauri::Result<T>;
 
 /// `Vec<u8>` to `String`
-pub fn bytes_to_str(bytes: Vec<u8>) -> String {
+pub fn bytes_string(bytes: Vec<u8>) -> String {
   std::str::from_utf8(&bytes).unwrap_or_default().into()
 }

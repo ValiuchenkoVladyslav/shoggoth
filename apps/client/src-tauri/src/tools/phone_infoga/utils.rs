@@ -1,4 +1,4 @@
-use crate::utils::{cmd, App, AppDirs};
+use crate::prelude::*;
 use std::path::PathBuf;
 
 pub fn infoga_dir(app: &App) -> PathBuf {
@@ -6,11 +6,11 @@ pub fn infoga_dir(app: &App) -> PathBuf {
 }
 
 pub fn infoga_path(app: &App) -> PathBuf {
-  #[cfg(target_os = "windows")]
-  return infoga_dir(app).join("phoneinfoga.exe");
-
-  #[cfg(not(target_os = "windows"))]
-  return infoga_dir(app).join("phoneinfoga");
+  infoga_dir(app).join(if cfg!(target_os = "windows") {
+    "phoneinfoga.exe"
+  } else {
+    "phoneinfoga"
+  })
 }
 
 pub fn run_infoga(app: &App, phone: &str) -> tokio::process::Command {
