@@ -53,10 +53,10 @@ export function useInfogaScanMutation(
     mutationFn() {
       return invoke<InfogaRes>("infoga_scan", {
         envs: [
-          [numverifyKeyStr, envs.numverifyKey ?? ""],
-          [googleApiKeyStr, envs.googleApiKey ?? ""],
-          [googleCSECXStr, envs.googleCSECX ?? ""],
-          [googleCSEMaxResultsStr, envs.googleCSEMaxResults ?? ""],
+          [numverifyKeyStr, envs.numverifyKey || ""],
+          [googleApiKeyStr, envs.googleApiKey || ""],
+          [googleCSECXStr, envs.googleCSECX || ""],
+          [googleCSEMaxResultsStr, envs.googleCSEMaxResults || ""],
         ],
         phone,
       });

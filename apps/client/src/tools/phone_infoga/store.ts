@@ -11,27 +11,26 @@ export const useInfogaEnvs = create((...args: unknown[]) => {
   const [set] = args as InferParams<typeof useInfogaEnvs>;
 
   return {
-    numverifyKey: isBrowser ? localStorage.getItem(numverifyKeyStr) : null,
+    numverifyKey: isBrowser && localStorage.getItem(numverifyKeyStr),
     setNumverifyKey(numverifyKey: string) {
       localStorage.setItem(numverifyKeyStr, numverifyKey);
       set({ numverifyKey });
     },
 
-    googleCSECX: isBrowser ? localStorage.getItem(googleCSECXStr) : null,
+    googleCSECX: isBrowser && localStorage.getItem(googleCSECXStr),
     setGoogleCSECX(googleCSECX: string) {
       localStorage.setItem(googleCSECXStr, googleCSECX);
       set({ googleCSECX });
     },
 
-    googleApiKey: isBrowser ? localStorage.getItem(googleApiKeyStr) : null,
+    googleApiKey: isBrowser && localStorage.getItem(googleApiKeyStr),
     setGoogleApiKey(googleApiKey: string) {
       localStorage.setItem(googleApiKeyStr, googleApiKey);
       set({ googleApiKey });
     },
 
-    googleCSEMaxResults: isBrowser
-      ? localStorage.getItem(googleCSEMaxResultsStr) || 10
-      : null,
+    googleCSEMaxResults:
+      isBrowser && (localStorage.getItem(googleCSEMaxResultsStr) || 10),
     setGoogleCSEMaxResults(googleCSEMaxResults: number) {
       localStorage.setItem(googleCSEMaxResultsStr, String(googleCSEMaxResults));
       set({ googleCSEMaxResults });
