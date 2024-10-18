@@ -1,7 +1,10 @@
 pub mod utils;
 
-use crate::types::{DataGraph, ProjectBase, ProjectFull, ProjectMeta};
-use anyhow::{Context, Result};
+use crate::{
+  types::{DataGraph, ProjectBase, ProjectFull, ProjectMeta},
+  CtxExt,
+};
+use anyhow::Result;
 use std::{
   fs::{read_dir, remove_file},
   path::PathBuf,
@@ -45,7 +48,7 @@ pub fn read_graph(dir: PathBuf, id: &str) -> Result<DataGraph> {
 /// * `dir` - path to projects directory. It may be different on client & server
 pub fn read_projects(dir: PathBuf) -> Result<Vec<ProjectMeta>> {
   let projects = read_dir(dir)
-    .context("Failed to read projects directory")?
+    .ctx("Failed to read projects directory")?
     .filter_map(|entry| {
       let file = entry.ok()?;
 
@@ -89,5 +92,5 @@ pub fn create_project(dir: PathBuf, base: ProjectBase) -> Result<ProjectMeta> {
 /// * `dir` - path to projects directory. It may be different on client & server
 /// * `id` - project id
 pub fn delete_project(dir: PathBuf, id: &str) -> Result<()> {
-  remove_file(project_path(dir, id)).context("Failed to delete project")
+  remove_file(project_path(dir, id)).ctx("Failed to delete project")
 }

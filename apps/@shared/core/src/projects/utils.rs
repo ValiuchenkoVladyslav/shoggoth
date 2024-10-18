@@ -1,5 +1,5 @@
-use crate::types::ProjectFull;
-use anyhow::{Context, Result};
+use crate::{types::ProjectFull, CtxExt};
+use anyhow::Result;
 use serde_json::{from_slice, to_vec};
 use std::{
   fs::{read, write},
@@ -18,9 +18,9 @@ pub fn project_path(dir: impl AsRef<Path>, id: &str) -> PathBuf {
 /// read project data from file
 /// * `path` - path to project file
 pub fn read_project(path: impl AsRef<Path>) -> Result<ProjectFull> {
-  let buffer = read(path.as_ref()).context("Failed to read project data")?;
+  let buffer = read(path.as_ref()).ctx("Failed to read project data")?;
 
-  from_slice(&buffer).context("Failed to parse project data")
+  from_slice(&buffer).ctx("Failed to parse project data")
 }
 
 /// write project data to file
@@ -29,7 +29,7 @@ pub fn read_project(path: impl AsRef<Path>) -> Result<ProjectFull> {
 pub fn write_project(path: impl AsRef<Path>, data: &ProjectFull) -> Result<()> {
   write(
     path.as_ref(),
-    to_vec(data).context("Failed to serialize project data")?,
+    to_vec(data).ctx("Failed to serialize project data")?,
   )
-  .context("Failed to write project data")
+  .ctx("Failed to write project data")
 }
