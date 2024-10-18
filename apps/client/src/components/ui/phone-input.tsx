@@ -98,8 +98,8 @@ const CountrySelect = ({
       <PopoverTrigger asChild>
         <Button
           type="button"
-          variant={"outline"}
-          className={cn("flex gap-1 rounded-e-none rounded-s-lg px-3")}
+          variant="outline"
+          className="flex gap-1 rounded-e-none rounded-s-lg px-3"
           disabled={disabled}
         >
           <FlagComponent country={value} countryName={value} />
