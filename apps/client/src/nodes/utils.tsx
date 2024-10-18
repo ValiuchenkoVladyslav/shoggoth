@@ -13,7 +13,7 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
-import { newId } from "~/utils";
+import { cn, newId } from "~/utils";
 
 /** node init type */
 export type NodeInit = Pick<Node, "type" | "data">;
@@ -145,7 +145,14 @@ export function BaseNode<T extends NodeProps>(
     <>
       <Handle type="target" position={Position.Top} />
       <ContextMenu>
-        <ContextMenuTrigger>{props.children}</ContextMenuTrigger>
+        <ContextMenuTrigger
+          className={cn(
+            "flexcol layer-dark p-3 rounded-lg gap-2",
+            props.className,
+          )}
+        >
+          {props.children}
+        </ContextMenuTrigger>
         <ContextMenuContent className="font-bold">
           {Array.isArray(props.actions)
             ? props.actions.map((action, i) => (
