@@ -2,19 +2,14 @@
 
 use crate::prelude::*;
 use serde_json::from_slice;
-use std::{
-  collections::HashMap,
-  fs,
-  path::PathBuf,
-  process::Stdio,
-  sync::{Arc, Mutex},
-};
+use std::{collections::HashMap, fs, path::PathBuf, process::Stdio};
 use tauri::{
   async_runtime::{block_on, spawn},
   Emitter, Listener,
 };
 use tokio::{
   io::{AsyncBufReadExt, AsyncWriteExt, BufReader},
+  sync::Mutex,
   time::{sleep, Duration},
 };
 
@@ -79,7 +74,7 @@ pub async fn cattg_phone(app: App, envs: [(&str, &str); 3], phone: &str) -> CmdR
     .spawn()?;
 
   let stderr = cmd.stderr.take().ctx("Failed to get stderr")?;
-  let stdin = Arc::new(Mutex::new(cmd.stdin.take().ctx("Failed to get stdin")?));
+  let stdin = Mutex::new(cmd.stdin.take().ctx("Failed to get stdin")?);
 
   let mut reader = BufReader::new(stderr).lines();
 
@@ -87,29 +82,26 @@ pub async fn cattg_phone(app: App, envs: [(&str, &str); 3], phone: &str) -> CmdR
     sleep(Duration::from_secs(4)).await;
 
     while let Ok(Some(line)) = reader.next_line().await {
-      if line.contains("/TcpFull complete!") {
-        if app.emit("cat-otp-request", 0).is_err() {
-          return;
-        }
+      if !line.contains("/TcpFull complete!") {
+        continue;
+      }
 
-        let stdin = Arc::clone(&stdin);
-
-        app.listen_any("cat-otp", move |event| {
-          let stdin = Arc::clone(&stdin);
-          let telegram_otp = event.payload();
-
-          let Ok(mut stdin) = stdin.lock() else {
-            return;
-          };
-
-          block_on(async {
-            let _ = stdin.write(format!("{telegram_otp}\n").as_bytes()).await;
-            let _ = stdin.flush().await;
-          });
-        });
-
+      if app.emit("cat-otp-request", 0).is_err() {
         return;
       }
+
+      app.listen_any("cat-otp", move |event| {
+        block_on(async {
+          let mut stdin = stdin.lock().await;
+
+          let telegram_otp = event.payload();
+
+          let _ = stdin.write(format!("{telegram_otp}\n").as_bytes()).await;
+          let _ = stdin.flush().await;
+        })
+      });
+
+      return;
     }
   });
 
