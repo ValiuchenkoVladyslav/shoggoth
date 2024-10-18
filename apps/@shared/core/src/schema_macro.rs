@@ -1,6 +1,7 @@
 /// helper macro to create a struct with following attributes:
 /// - derive `TS`, `Serialize`, `Deserialize`, `Debug`
 /// - ts-rs `ts(export, export_to = "./index.ts")`
+///
 /// you can also add custom derives by passing them as a tuple after schema name
 /// ### Usage
 /// ```rust
