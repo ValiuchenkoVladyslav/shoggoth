@@ -10,6 +10,7 @@ import {
 import { country } from "~/nodes/country";
 import { nickname } from "~/nodes/nickname";
 import { phone } from "~/nodes/phone/node";
+import { telegram } from "~/nodes/telegram";
 import { text } from "~/nodes/text";
 import { useProject } from "~/projects/store";
 
@@ -32,6 +33,7 @@ export default function Layout(props: React.PropsWithChildren) {
             <phone.createNode />
             <nickname.createNode />
             <country.createNode />
+            <telegram.createNode />
           </ContextMenuContent>
         </ContextMenu>
       </Resizable>

@@ -13,7 +13,7 @@ import {
   useInfogaUrlsMutation,
 } from "~/tools/phone_infoga/tauri-api";
 import { country } from "../country";
-import { nickname } from "../nickname";
+import { telegram } from "../telegram";
 import { SearchExact } from "../text";
 import { useCreateChildren } from "../utils";
 
@@ -29,10 +29,7 @@ export function PhoneActions(props: PhoneProps) {
   const createChildren = useCreateChildren(props);
 
   const cattg = useCatTgCheckMutation(props.data.phone!, (data) => {
-    createChildren([
-      nickname.init(data.username ?? undefined),
-      ...(data.usernames?.map(nickname.init) ?? []),
-    ]);
+    createChildren([telegram.init(data)]);
   });
 
   const infogaScan = useInfogaScanMutation(props.data.phone!, (data) => {
