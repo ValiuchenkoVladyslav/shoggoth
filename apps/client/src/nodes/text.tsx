@@ -1,5 +1,5 @@
 import { Text as TextIcon } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   ContextMenuItem,
   ContextMenuLabel,
@@ -119,14 +119,21 @@ export const text = createNode<Text, typeof textInit>({
     const textarea = useRef<HTMLTextAreaElement>(null);
 
     if (textarea.current) {
+      // DO NOT REMOVE IT PREVENTS INFINITE GRAPH RERENDERS.
+      // WITHOUT IT, THE GRAPH IS DOOMED AS SOON AS YOU ADD A SINGLE TEXT NODE
+      let resCount = 0;
+
       const resizeObserver = new ResizeObserver(() => {
-        if (timer) clearTimeout(timer);
+        resCount++;
+        if (resCount < 6) return;
+
+        clearTimeout(timer);
         timer = setTimeout(() => {
           updateNode(props.id, {
             ...props,
             height: undefined, // force reactflow to recalculate height
           });
-        }, 100);
+        }, 150);
       });
 
       resizeObserver.observe(textarea.current);
