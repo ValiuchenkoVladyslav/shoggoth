@@ -1,6 +1,7 @@
 // https://github.com/bellingcat/telegram-phone-number-checker
+// tags: phone numbers, telegram
 
-use crate::prelude::*;
+use crate::utils::*;
 use serde_json::from_slice;
 use std::{collections::HashMap, fs, path::PathBuf, process::Stdio};
 use tauri::{
@@ -15,7 +16,7 @@ use tokio::{
 
 const APP_CMD: &str = "telegram-phone-number-checker";
 
-pub fn get_cattg_dir(app: &App) -> PathBuf {
+fn get_cattg_dir(app: &App) -> PathBuf {
   app.tools_dir().join(APP_CMD)
 }
 

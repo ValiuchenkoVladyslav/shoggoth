@@ -1,9 +1,10 @@
 // https://github.com/sundowndev/phoneinfoga
+// tags: phone numbers
 
 mod utils;
-use utils::{infoga_dir, infoga_path, run_infoga};
+use utils::{infoga_dir, infoga_path, run_infoga, InfogaRes};
 
-use crate::prelude::*;
+use crate::utils::*;
 use flate2::read::GzDecoder;
 use tar::Archive;
 
@@ -37,11 +38,6 @@ pub async fn infoga_install(app: App) -> CmdRes {
 pub fn infoga_check(app: App) -> bool {
   infoga_path(&app).exists()
 }
-
-schema!(InfogaRes (Default) {
-  carrier: Option<String>,
-  location: Option<String>,
-});
 
 #[tauri::command(rename_all = "snake_case")]
 pub async fn infoga_scan(app: App, envs: [(&str, &str); 4], phone: &str) -> CmdRes<InfogaRes> {

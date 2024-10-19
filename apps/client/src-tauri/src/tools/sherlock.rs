@@ -1,6 +1,7 @@
 // https://github.com/sherlock-project/sherlock
+// nicknames
 
-use crate::prelude::*;
+use crate::utils::*;
 
 #[tauri::command(rename_all = "snake_case")]
 pub async fn sherlock_install() -> CmdRes {
