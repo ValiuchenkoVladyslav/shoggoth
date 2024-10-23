@@ -1,6 +1,7 @@
+//! general purpose shoggoth utils
+
 pub mod projects;
 pub mod schema_macro;
-pub mod types;
 
 use anyhow::{Context, Result};
 use std::{error::Error, fmt::Display};
