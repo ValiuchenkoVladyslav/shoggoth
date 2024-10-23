@@ -4,7 +4,7 @@ mod utils {
   pub const APP_CMD: &str = "sherlock";
 }
 
-pub mod commands {
+pub mod cmds {
   use super::utils::*;
   use crate::utils::*;
 

@@ -25,18 +25,18 @@ fn main() {
       prjs::create_project,
       prjs::delete_project,
       // phone infoga
-      tls::phone_infoga::commands::infoga_install,
-      tls::phone_infoga::commands::infoga_check,
-      tls::phone_infoga::commands::infoga_scan,
-      tls::phone_infoga::commands::infoga_urls,
+      tls::phone_infoga::cmds::infoga_install,
+      tls::phone_infoga::cmds::infoga_check,
+      tls::phone_infoga::cmds::infoga_scan,
+      tls::phone_infoga::cmds::infoga_urls,
       // sherlock
-      tls::sherlock::commands::sherlock_install,
-      tls::sherlock::commands::sherlock_check,
-      tls::sherlock::commands::sherlock_search,
+      tls::sherlock::cmds::sherlock_install,
+      tls::sherlock::cmds::sherlock_check,
+      tls::sherlock::cmds::sherlock_search,
       // bellingcat telegram phone checker
-      tls::bellingcat_tg::commands::cattg_install,
-      tls::bellingcat_tg::commands::cattg_check,
-      tls::bellingcat_tg::commands::cattg_phone,
+      tls::bellingcat_tg::cmds::cattg_install,
+      tls::bellingcat_tg::cmds::cattg_check,
+      tls::bellingcat_tg::cmds::cattg_phone,
     ])
     .setup(|app| {
       app.app_handle().create_app_dirs()?;

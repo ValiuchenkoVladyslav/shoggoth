@@ -25,7 +25,7 @@ mod utils {
   }
 }
 
-pub mod commands {
+pub mod cmds {
   use super::utils::*;
   use crate::utils::*;
 
