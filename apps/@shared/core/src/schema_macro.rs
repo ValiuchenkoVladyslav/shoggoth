@@ -1,35 +1,70 @@
-/// helper macro to create a struct with following attributes:
-/// - derive `TS`, `Serialize`, `Deserialize`, `Debug`
-/// - ts-rs `ts(export, export_to = "./index.ts")`
+//! helper macro for schema creation
+
+/// lets you create a struct with set of useful features
+/// - [serde::Serialize], [serde::Deserialize], [Debug], [Default]
+/// - [ts_rs::TS] `ts(export, export_to = "./index.ts")`
 ///
-/// you can also add custom derives by passing them as a tuple after schema name
-/// ### Usage
+/// #### Usage
 /// ```rust
-/// shogg_core::schema!(SchemaName {
+/// use shogg_core::schema;
+///
+/// schema!(SchemaName {
 ///   field1: String,
+///   field?: u64, // ? wraps field type with Option and prepends #[ts(optional)]
 /// });
 ///
-/// shogg_core::schema!(WithAdditionalDerives (Default) {
+/// // additional derives can be passed as a tuple after schema name
+/// schema!(AdditionalDerives (Clone, PartialEq, Eq) {
 ///   field1: String,
 /// });
 /// ```
 #[macro_export]
 macro_rules! schema {
-  (
-    $name:ident $(($($derives:ident),*))? {
-      $(
-        $(#[$field_attr:meta])*
-        $field:ident: $typ:ty$(,)?
-      ),*
-    }
-  ) => {
-    #[derive(ts_rs::TS, serde::Serialize, serde::Deserialize, Debug $(, $($derives),*)?)]
+  // exit
+  ($name:ident $(($($derives:ident),*))? {} -> ($($result:tt)*)) => (
+    #[derive(ts_rs::TS, serde::Serialize, serde::Deserialize, Debug, Default $(, $($derives),*)?)]
     #[ts(export, export_to = "./index.ts")]
     pub struct $name {
-      $(
-        $(#[$field_attr])*
-        pub $field: $typ
-      ),*
+      $($result)*
     }
-  };
+  );
+
+  ( // optinal field
+    $name:ident $(($($derives:ident),*))? {
+      $(#[$attributes:meta])*
+      $field:ident?: $typ:ty,
+      $($rest:tt)*
+    } -> ($($result:tt)*)
+  ) => (
+    schema!($name $(($($derives),*))? { $($rest)* } -> (
+      $($result)*
+      $(#[$attributes])*
+      #[ts(optional)]
+      pub $field: Option<$typ>,
+    ));
+  );
+
+  ( // required field
+    $name:ident $(($($derives:ident),*))? {
+      $(#[$attributes:meta])*
+      $field:ident: $typ:ty,
+      $($rest:tt)*
+    } -> ($($result:tt)*)
+  ) => (
+    schema!($name $(($($derives),*))? { $($rest)* } -> (
+      $($result)*
+      $(#[$attributes])*
+      pub $field: $typ,
+    ));
+  );
+
+  ( // enter
+    $name:ident $(($($derives:ident),*))? {
+      $($fields:tt)*
+    }
+  ) => (
+    schema!($name $(($($derives),*))? {
+      $($fields)*
+    } -> ());
+  );
 }
