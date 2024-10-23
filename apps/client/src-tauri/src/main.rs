@@ -1,13 +1,14 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod prelude;
-use prelude::{AppDirs, Manager};
-
-mod app_dirs;
+mod api;
 mod commands;
+mod extension;
+
+mod utils;
+use utils::{AppDirs, Manager};
 
 mod projects;
-use projects::commands as prjs;
+use projects as prjs;
 
 mod tools;
 use tools as tls;
@@ -24,24 +25,26 @@ fn main() {
       prjs::create_project,
       prjs::delete_project,
       // phone infoga
-      tls::phone_infoga::infoga_install,
-      tls::phone_infoga::infoga_check,
-      tls::phone_infoga::infoga_scan,
-      tls::phone_infoga::infoga_urls,
+      tls::phone_infoga::commands::infoga_install,
+      tls::phone_infoga::commands::infoga_check,
+      tls::phone_infoga::commands::infoga_scan,
+      tls::phone_infoga::commands::infoga_urls,
       // sherlock
-      tls::sherlock::sherlock_install,
-      tls::sherlock::sherlock_check,
-      tls::sherlock::sherlock_search,
+      tls::sherlock::commands::sherlock_install,
+      tls::sherlock::commands::sherlock_check,
+      tls::sherlock::commands::sherlock_search,
       // bellingcat telegram phone checker
-      tls::bellingcat_tg::cattg_install,
-      tls::bellingcat_tg::cattg_check,
-      tls::bellingcat_tg::cattg_phone,
+      tls::bellingcat_tg::commands::cattg_install,
+      tls::bellingcat_tg::commands::cattg_check,
+      tls::bellingcat_tg::commands::cattg_phone,
     ])
     .setup(|app| {
       app.app_handle().create_app_dirs()?;
 
+      api::run_server(app.handle())?;
+
       Ok(())
     })
     .run(tauri::generate_context!())
-    .unwrap();
+    .expect("Failed to start the app!");
 }
