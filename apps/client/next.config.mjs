@@ -7,7 +7,7 @@ export default {
   productionBrowserSourceMaps: false,
 
   devIndicators: {
-    autoPrerender: false,
+    buildActivity: false,
   },
 
   generateEtags: false,
