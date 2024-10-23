@@ -1,6 +1,7 @@
 //! useful schemas
 
 use crate::schema;
+use serde_json::{Map, Value};
 
 pub mod node_types {
   use crate::schema;
@@ -64,7 +65,7 @@ schema!(ProjectMeta {
   created_at: u128,
   archived: bool,
 
-  #[ts(flatten)]
+  #[serde(flatten)]
   base: ProjectBase,
 });
 
@@ -83,7 +84,7 @@ schema!(Node {
   id: String,
   position: NodePos,
   r#type: String,
-  data: node_types::NodeType,
+  data: Map<String, Value>,
 });
 
 schema!(DataGraph {
