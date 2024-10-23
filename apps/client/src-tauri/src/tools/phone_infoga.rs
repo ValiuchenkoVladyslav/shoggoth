@@ -71,7 +71,10 @@ pub mod cmds {
 
     let output = run_infoga(&app, phone).envs(envs).output().await?;
 
-    let mut infoga_res = Phone::default();
+    let mut infoga_res = Phone {
+      number: phone.into(),
+      ..Default::default()
+    };
 
     for col in bytes_string(output.stdout).split("\n") {
       if col.starts_with(CARRIER_PREFIX) {
