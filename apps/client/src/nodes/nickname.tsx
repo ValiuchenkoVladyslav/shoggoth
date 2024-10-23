@@ -6,6 +6,7 @@ import {
   ContextMenuSubTrigger,
 } from "~/components/ui/context-menu";
 import { Input } from "~/components/ui/input";
+import type { Nickname } from "~/gen/core";
 import { useSherlockSearchMutation } from "~/tools/sherlock/tauri-api";
 import { SearchExact } from "./text";
 import { BaseNode, createNode } from "./utils";
@@ -14,12 +15,7 @@ function nicknameInit(nickname = "") {
   return { nickname };
 }
 
-export const nickname = createNode<
-  {
-    nickname: string;
-  },
-  typeof nicknameInit
->({
+export const nickname = createNode<Nickname, typeof nicknameInit>({
   type: "nickname",
   icon: <AtSign width={18} />,
   initFn: nicknameInit,

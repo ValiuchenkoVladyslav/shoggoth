@@ -1,5 +1,5 @@
 import { Text as TextIcon } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import {
   ContextMenuItem,
   ContextMenuLabel,
@@ -9,11 +9,10 @@ import {
   ContextMenuSubTrigger,
 } from "~/components/ui/context-menu";
 import { Textarea } from "~/components/ui/textarea";
+import type { Text } from "~/gen/core";
 import { DDGIcon, GoogleIcon, YandexIcon } from "~/icons/browsers";
 import { browse } from "~/utils";
 import { BaseNode, createNode } from "./utils";
-
-type Text = { text?: string };
 
 const googleSearch = "https://www.google.com/search?q=";
 const ddgSearch = "https://duckduckgo.com/?q=";
@@ -151,7 +150,7 @@ export const text = createNode<Text, typeof textInit>({
         </h2>
         <Textarea
           ref={textarea}
-          defaultValue={props.data.text}
+          defaultValue={props.data.text ?? ""}
           className="min-h-[3lh] h-[7lh]"
           onChange={(e) => {
             updateNode(props.id, {

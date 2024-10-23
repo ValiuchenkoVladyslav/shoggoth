@@ -1,10 +1,11 @@
 import { useReactFlow } from "@xyflow/react";
-import { Phone } from "lucide-react";
+import { Phone as PhoneIcon } from "lucide-react";
 import { PhoneInput } from "~/components/ui/phone-input";
+import type { Phone } from "~/gen/core";
 import { BaseNode, createNode } from "../utils";
-import { PhoneActions, type PhoneNumber, type PhoneProps } from "./actions";
+import { PhoneActions, type PhoneNumber } from "./actions";
 
-function PhoneCarrier(props: Pick<PhoneProps["data"], "carrier">) {
+function PhoneCarrier(props: Pick<Phone, "carrier">) {
   if (!props.carrier) return null;
 
   return (
@@ -15,7 +16,7 @@ function PhoneCarrier(props: Pick<PhoneProps["data"], "carrier">) {
   );
 }
 
-function PhoneLocation(props: Pick<PhoneProps["data"], "location">) {
+function PhoneLocation(props: Pick<Phone, "location">) {
   if (!props.location) return null;
 
   return (
@@ -26,12 +27,12 @@ function PhoneLocation(props: Pick<PhoneProps["data"], "location">) {
   );
 }
 
-export function phoneInit(phone?: string) {
-  return { phone };
+export function phoneInit(number = ""): Phone {
+  return { number };
 }
 
 export const phone = createNode<PhoneNumber["data"], typeof phoneInit>({
-  icon: <Phone width={17} />,
+  icon: <PhoneIcon width={17} />,
   type: "phone",
   initFn: phoneInit,
   graphNode(props) {
@@ -45,7 +46,7 @@ export const phone = createNode<PhoneNumber["data"], typeof phoneInit>({
         actions={<PhoneActions {...props} />}
       >
         <h2 className="font-semibold flex gap-2">
-          <Phone width={18} />
+          <PhoneIcon width={18} />
           PHONE NUMBER
         </h2>
         <PhoneInput
@@ -53,10 +54,10 @@ export const phone = createNode<PhoneNumber["data"], typeof phoneInit>({
           onChange={(value) => {
             updateNode(props.id, {
               ...props,
-              data: { ...data, phone: String(value) },
+              data: { ...data, number: String(value) },
             });
           }}
-          value={data.phone}
+          value={data.number}
         />
 
         <PhoneCarrier carrier={data.carrier} />

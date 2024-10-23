@@ -6,24 +6,24 @@ import {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
 } from "~/components/ui/context-menu";
+import type { TelegramUser } from "~/gen/core";
 import type { CatPhone } from "~/gen/tauri";
 import { TelegramIcon } from "~/icons/telegram";
 import { useSherlockSearchMutation } from "~/tools/sherlock/tauri-api";
 import { BaseNode, createNode } from "./utils";
 
-function telegramInit(data?: Partial<CatPhone>): Partial<CatPhone> {
+function telegramInit(data?: CatPhone): CatPhone {
   if (data) return data;
 
   return {};
 }
 
-export const telegram = createNode<Partial<CatPhone>, typeof telegramInit>({
+export const telegram = createNode<TelegramUser, typeof telegramInit>({
   type: "telegram",
   icon: <TelegramIcon width={18} />,
   initFn: telegramInit,
   graphNode(props) {
     const info = props.data;
-    const { updateNode } = props.useReactFlow();
     const sherlockSearch = useSherlockSearchMutation(info.username!);
 
     return (

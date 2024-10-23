@@ -6,7 +6,7 @@ import {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
 } from "~/components/ui/context-menu";
-import type { InfogaRes } from "~/gen/tauri";
+import type { Phone } from "~/gen/core";
 import { useCatTgCheckMutation } from "~/tools/bellingcat_tg/tauri-api";
 import {
   useInfogaScanMutation,
@@ -17,22 +17,17 @@ import { telegram } from "../telegram";
 import { SearchExact } from "../text";
 import { useCreateChildren } from "../utils";
 
-export type PhoneNumber = Node<
-  Partial<InfogaRes> & {
-    phone?: string;
-  }
->;
-export type PhoneProps = NodeProps<PhoneNumber>;
+export type PhoneNumber = Node<Phone>;
 
-export function PhoneActions(props: PhoneProps) {
+export function PhoneActions(props: NodeProps<PhoneNumber>) {
   const { updateNode } = useReactFlow<PhoneNumber>();
   const createChildren = useCreateChildren(props);
 
-  const cattg = useCatTgCheckMutation(props.data.phone!, (data) => {
+  const cattg = useCatTgCheckMutation(props.data.number!, (data) => {
     createChildren([telegram.init(data)]);
   });
 
-  const infogaScan = useInfogaScanMutation(props.data.phone!, (data) => {
+  const infogaScan = useInfogaScanMutation(props.data.number!, (data) => {
     updateNode(props.id, {
       ...props,
       height: undefined, // to force height recalculation
@@ -40,9 +35,9 @@ export function PhoneActions(props: PhoneProps) {
     });
   });
 
-  const infogaUrls = useInfogaUrlsMutation(props.data.phone!);
+  const infogaUrls = useInfogaUrlsMutation(props.data.number!);
 
-  const isPhoneValid = isValidPhoneNumber(props.data.phone ?? "");
+  const isPhoneValid = isValidPhoneNumber(props.data.number ?? "");
 
   return (
     <>
@@ -75,7 +70,7 @@ export function PhoneActions(props: PhoneProps) {
           Text
         </ContextMenuSubTrigger>
         <ContextMenuSubContent>
-          <SearchExact text={props.data.phone} />
+          <SearchExact text={props.data.number} />
         </ContextMenuSubContent>
       </ContextMenuSub>
 
@@ -83,7 +78,7 @@ export function PhoneActions(props: PhoneProps) {
         disabled={!isPhoneValid}
         onClick={() => {
           createChildren([
-            country.init(parsePhoneNumber(props.data.phone!)?.country),
+            country.init(parsePhoneNumber(props.data.number!)?.country),
           ]);
         }}
       >

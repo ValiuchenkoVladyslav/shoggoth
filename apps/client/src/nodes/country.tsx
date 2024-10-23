@@ -1,28 +1,24 @@
 import { Flag } from "lucide-react";
+import type { Country } from "~/gen/core";
 import { cn } from "~/utils";
 import { BaseNode, createNode } from "./utils";
 
 const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
 
-function countryInit(country?: string) {
-  return { country };
+function countryInit(name = "") {
+  return { name };
 }
 
-export const country = createNode<
-  {
-    country?: string;
-  },
-  typeof countryInit
->({
+export const country = createNode<Country, typeof countryInit>({
   type: "country",
   icon: <Flag width={17} />,
   initFn: countryInit,
   graphNode(props) {
-    const country = props.data.country;
+    const country = props.data.name;
 
     let countryFull = country;
     try {
-      countryFull = regionNames.of(country!);
+      countryFull = regionNames.of(country!) ?? "";
     } catch (e) {}
 
     return (
