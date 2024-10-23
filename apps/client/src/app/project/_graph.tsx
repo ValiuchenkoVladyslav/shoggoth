@@ -16,7 +16,7 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 import { useCallback, useEffect } from "react";
-import type { DataGraph, DataNode } from "~/gen/core";
+import type { DataGraph, Node as DataNode } from "~/gen/core";
 import { nodeTypes } from "~/nodes";
 import { useProject } from "~/projects/store";
 import { useEditProjectGraphMutation } from "~/projects/tauri-api";
