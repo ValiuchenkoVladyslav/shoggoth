@@ -1,6 +1,6 @@
 //! common utilities for the app
 
-use std::{ffi::OsStr, fs, io, path::PathBuf, str};
+use std::{ffi::OsStr, fs, io, path::PathBuf};
 use tokio::process::Command;
 
 // re-export common imports
@@ -26,7 +26,7 @@ pub type AppState = actix_web::web::Data<App>;
 
 /// `Vec<u8>` to `String`
 pub fn bytes_string(bytes: Vec<u8>) -> String {
-  str::from_utf8(&bytes).unwrap_or_default().into()
+  String::from_utf8(bytes).unwrap_or_default()
 }
 
 /// [tauri::AppHandle] extension for app utility dirs
