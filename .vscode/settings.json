@@ -3,6 +3,9 @@
     "bun.lockb": true,
     "Cargo.lock": true,
     "LICENSE": true,
+    "**/postcss.config.mjs": true,
+    "**/components.json": true,
+    "**/build.rs": true,
   },
   "explorer.excludeGitIgnore": true,
 
