@@ -2,7 +2,6 @@
 
 mod api;
 mod commands;
-mod extension;
 
 mod utils;
 use utils::{AppDirs, Manager};
