@@ -26,7 +26,7 @@ const graphId = "GRAPH_FLOW";
 
 let unfinishedConnection: FinalConnectionState | undefined;
 
-let autosaveTimeout: ReturnType<typeof setTimeout> | undefined;
+let autosaveTimeout: NodeJS.Timeout | undefined;
 
 export function Graph(props: DataGraph) {
   const [nodes, _, _onNodesChange] = useNodesState(props.nodes as Node[]);
@@ -43,7 +43,7 @@ export function Graph(props: DataGraph) {
   // AUTOSAVE
   // biome-ignore lint/correctness/useExhaustiveDependencies: subscribing to editProjectGraph will cause infinite loop
   useEffect(() => {
-    window.clearTimeout(autosaveTimeout);
+    clearTimeout(autosaveTimeout);
     autosaveTimeout = setTimeout(() => {
       editProjectGraph.mutate({
         id: projId,
