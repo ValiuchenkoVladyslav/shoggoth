@@ -10,8 +10,13 @@
       "dependsOn": ["^build:debug"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
-    "types:check": {
-      "dependsOn": ["^types:check"]
+    "//#types:gen": {
+      "dependsOn": ["^types:gen"],
+      "inputs": ["**/*.rs"],
+      "outputs": [
+        "apps/@shared/core/bindings/**",
+        "apps/client/src-tauri/bindings/**"
+      ]
     },
     "dev": {
       "cache": false,
