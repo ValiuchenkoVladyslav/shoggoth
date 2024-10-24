@@ -1,6 +1,8 @@
-use crate::utils::CmdRes;
+//! general purpose commands
 
-#[tauri::command(rename_all = "snake_case")]
+use crate::utils::*;
+
+#[command(rename_all = "snake_case")]
 pub fn browse(url: &str) -> CmdRes {
   open::that(url)?;
 
