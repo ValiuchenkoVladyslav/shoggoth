@@ -26,7 +26,7 @@ const graphId = "GRAPH_FLOW";
 
 let unfinishedConnection: FinalConnectionState | undefined;
 
-let autosaveTimeout: NodeJS.Timeout | undefined;
+let autosaveTimeout: ReturnType<typeof setTimeout> | undefined;
 
 export function Graph(props: DataGraph) {
   const [nodes, _, _onNodesChange] = useNodesState(props.nodes as Node[]);
