@@ -6,13 +6,17 @@
 **/.next/
 **/next-env.d.ts
 
-# typescript
-*.tsbuildinfo
+# sveltekit & vite
+**/.svelte-kit/
+**/build/
+**/vite.config.js.timestamp-*
+**/vite.config.ts.timestamp-*
 
 # tauri generated
-**/gen/
+apps/client/src-tauri/gen/
 
-# generated types
+# typescript & generated types
+*.tsbuildinfo
 apps/@shared/core/bindings/
 apps/client/src-tauri/bindings/
 

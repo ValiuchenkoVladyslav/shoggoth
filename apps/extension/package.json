@@ -1,23 +1,25 @@
 {
-  "name": "shoggoth-extension",
-  "version": "0.1.0",
-  "private": true,
+  "name": "extension",
+  "version": "0.0.1",
+  "type": "module",
   "scripts": {
-    "dev": "next dev --turbo -p 3001",
-    "build:prod": "next build --no-lint",
-    "build:debug": "next build --no-lint",
-    "types:check": "tsc --noEmit"
-  },
-  "dependencies": {
-    "next": "15.0.0-rc.0",
-    "react": "19.0.0-rc-f994737d14-20240522",
-    "react-dom": "19.0.0-rc-f994737d14-20240522"
+    "dev": "vite dev",
+    "build:prod": "bun --bun vite build",
+    "types:check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "@sveltejs/adapter-static": "^3.0.5",
+    "@sveltejs/kit": "^2.0.0",
+    "@sveltejs/vite-plugin-svelte": "^4.0.0",
+    "@types/bun": "^1.1.12",
+    "@types/firefox-webext-browser": "^120.0.4",
+    "autoprefixer": "^10.4.20",
+    "svelte": "^5.0.0",
+    "svelte-check": "^4.0.0",
+    "tailwindcss": "^3.4.9",
+    "vite": "^5.0.3"
+  },
+  "dependencies": {
+    "lucide-svelte": "^0.453.0"
   }
 }

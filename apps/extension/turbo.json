@@ -5,12 +5,10 @@
     "build:prod": {
       "dependsOn": ["^build:prod"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["out/**"]
+      "outputs": ["build/**"]
     },
     "build:debug": {
-      "dependsOn": ["^build:debug"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["out/**"]
+      "dependsOn": ["^build:prod"]
     }
   }
 }

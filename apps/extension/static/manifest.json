@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Shoggoth Eye",
+  "version": "0.0.1",
+  "description": "Browser extension for Shoggoth client helpers",
+
+  "action": {
+    "default_popup": "index.html"
+  },
+
+  "permissions": ["tabs"],
+  "host_permissions": ["http://localhost:2099/*"],
+
+  "icons": {
+    "16": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
+  }
+}
