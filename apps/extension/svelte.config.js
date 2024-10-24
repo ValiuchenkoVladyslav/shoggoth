@@ -1,5 +1,5 @@
-import staticAdapter from '@sveltejs/adapter-static';
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import staticAdapter from "@sveltejs/adapter-static";
+import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
 /**
  * @param {import('@sveltejs/adapter-static').AdapterOptions} options
@@ -24,27 +24,25 @@ function extensionAdapter(options) {
             Bun.write("./build/main.js", scriptText.text);
 
             scriptText.remove();
-          }
+          },
         })
-        .transform(
-          await Bun.file("./build/index.html").text()
-        );
+        .transform(await Bun.file("./build/index.html").text());
 
       await Bun.write("./build/index.html", htmlContent);
-    }
-  }
+    },
+  };
 }
 
 /** @type {import('@sveltejs/kit').Config} */
 export default {
-	preprocess: vitePreprocess(),
+  preprocess: vitePreprocess(),
 
-	kit: {
-		adapter: extensionAdapter(),
+  kit: {
+    adapter: extensionAdapter(),
 
     alias: {
       "~/gen/core": "../@shared/core/bindings",
       "~/gen/tauri": "../client/src-tauri/bindings",
     },
-	},
+  },
 };
