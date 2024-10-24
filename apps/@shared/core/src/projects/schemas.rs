@@ -14,6 +14,10 @@ pub mod node_types {
     name: String,
   });
 
+  schema!(Url {
+    url: String,
+  });
+
   schema!(TelegramUser {
     id?: u64,
     username?: String,
