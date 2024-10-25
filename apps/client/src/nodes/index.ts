@@ -3,6 +3,7 @@ import { nickname } from "./nickname";
 import { phone } from "./phone/node";
 import { telegram } from "./telegram";
 import { text } from "./text";
+import { url } from "./url";
 
 export const nodeTypes = {
   default: text.graphNode,
@@ -10,4 +11,5 @@ export const nodeTypes = {
   nickname: nickname.graphNode,
   country: country.graphNode,
   telegram: telegram.graphNode,
+  url: url.graphNode,
 };
