@@ -6,7 +6,7 @@ import { text } from "./text";
 import { url } from "./url";
 
 export const nodeTypes = {
-  default: text.graphNode,
+  text: text.graphNode,
   phone: phone.graphNode,
   nickname: nickname.graphNode,
   country: country.graphNode,

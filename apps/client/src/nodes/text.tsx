@@ -112,6 +112,7 @@ function textInit(text?: string) {
 
 export const text = createNode<Text, typeof textInit>({
   icon: <TextIcon width={18} />,
+  type: "text",
   initFn: textInit,
   graphNode(props) {
     const { updateNode } = props.useReactFlow();
