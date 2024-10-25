@@ -9,7 +9,6 @@ import {
   ContextMenuContent,
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
-import type { Url } from "~/gen/core";
 import type { TmpNode } from "~/gen/tauri";
 import { country } from "~/nodes/country";
 import { nickname } from "~/nodes/nickname";
@@ -23,18 +22,19 @@ function ProjectSidebar() {
   const { tmpNodes, addTmpNode } = useTmpNodes();
 
   useEffect(() => {
-    const urlUnsub = listen<TmpNode>("add-url", (e) => {
-      addTmpNode(e.payload);
-    });
+    function handleNode(evt: { payload: TmpNode }) {
+      addTmpNode(evt.payload);
+    }
 
-    const nickUnsub = listen<TmpNode>("add-nickname", (e) => {
-      addTmpNode(e.payload);
-    });
+    const urlUnsub = listen("add-url", handleNode);
+    const nickUnsub = listen("add-nickname", handleNode);
+    const textUnsub = listen("add-text", handleNode);
 
     return () => {
       (async () => {
         (await urlUnsub)();
         (await nickUnsub)();
+        (await textUnsub)();
       })();
     };
   }, [addTmpNode]);
@@ -56,9 +56,13 @@ function ProjectSidebar() {
               }}
             >
               <h3 className="text-lg font-semibold uppercase">{node.type}</h3>
-              <p className="break-words">
-                {(JSON.parse(node.data) as Url).url}
-              </p>
+              <ul>
+                {Object.entries(JSON.parse(node.data)).map(([key, value]) => (
+                  <li key={key} className="break-words">
+                    {key}: {String(value)}
+                  </li>
+                ))}
+              </ul>
             </li>
           ))}
         </ul>
