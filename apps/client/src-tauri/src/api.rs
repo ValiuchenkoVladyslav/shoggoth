@@ -1,23 +1,26 @@
-//! api to allow interaction with browser extension
+//! api to allow interaction with external tools
 
 pub mod utils {
   use crate::utils::AppState;
+  use serde::Serialize;
+  use serde_json::{to_string, Result};
   use shogg_core::schema;
 
   pub type HttpRes = actix_web::HttpResponse;
-  pub use actix_web::Responder as ApiRes;
 
   schema!(TmpNode (Clone) {
+    id: u128,
     data: String,
     r#type: String,
   });
 
   impl TmpNode {
-    pub fn new(data: &str, typ: &str) -> Self {
-      Self {
-        data: data.to_string(),
-        r#type: typ.to_string(),
-      }
+    pub fn new<T: ?Sized + Serialize>(data: &T, typ: &str) -> Result<Self> {
+      Ok(Self {
+        id: Box::into_raw(Box::new(0)) as u128,
+        data: to_string(data)?,
+        r#type: typ.into(),
+      })
     }
   }
 
@@ -39,22 +42,24 @@ mod routes {
   use shogg_core::projects::schemas::node_types::{Nickname, Url};
 
   #[get("/")]
-  pub async fn status() -> impl ApiRes {
-    HttpRes::Ok()
+  pub async fn status() -> HttpRes {
+    HttpRes::Ok().finish()
   }
 
   #[post("/add-url")]
   pub async fn add_url(app: AppState, data: Json<Url>) -> HttpRes {
-    let tmp_url = TmpNode::new(&data.url, "url");
-
-    emit_node(app, "add-url", tmp_url)
+    match TmpNode::new(&data, "url") {
+      Ok(tmp_url) => emit_node(app, "add-url", tmp_url),
+      _ => HttpRes::BadRequest().body("Failed to serialize the URL"),
+    }
   }
 
   #[post("/add-nickname")]
   pub async fn add_nickname(app: AppState, data: Json<Nickname>) -> HttpRes {
-    let tmp_nickname = TmpNode::new(&data.nickname, "nickname");
-
-    emit_node(app, "add-nickname", tmp_nickname)
+    match TmpNode::new(&data, "nickname") {
+      Ok(tmp_nickname) => emit_node(app, "add-nickname", tmp_nickname),
+      _ => HttpRes::BadRequest().body("Failed to serialize the nickname"),
+    }
   }
 }
 
