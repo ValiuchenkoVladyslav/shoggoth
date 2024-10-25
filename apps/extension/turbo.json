@@ -8,7 +8,9 @@
       "outputs": ["build/**"]
     },
     "build:debug": {
-      "dependsOn": ["^build:prod"]
+      "dependsOn": ["^build:debug"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["build/**"]
     }
   }
 }

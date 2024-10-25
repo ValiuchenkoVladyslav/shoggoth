@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
+    "build:debug": "bun --bun vite build",
     "build:prod": "bun --bun vite build",
     "types:check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
   },
