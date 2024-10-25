@@ -1,7 +1,6 @@
 //! api to allow interaction with external tools
 
 pub mod utils {
-  use crate::utils::AppState;
   use serde::Serialize;
   use serde_json::{to_string, Result};
   use shogg_core::schema;
@@ -24,43 +23,53 @@ pub mod utils {
     }
   }
 
-  pub fn emit_node(app: AppState, event: &str, node: TmpNode) -> HttpRes {
-    use tauri::Emitter;
+  /// define route for adding a temporary node
+  macro_rules! add_node {
+    ($path:literal, $evt:literal, $node_type:literal, $typ:ty, $node_name:ident) => {
+      #[actix_web::post($path)]
+      pub async fn $node_name(
+        app: crate::utils::AppState,
+        data: Json<$typ>,
+      ) -> actix_web::HttpResponse {
+        use tauri::Emitter;
 
-    if app.emit(event, node).is_ok() {
-      return HttpRes::Ok().finish();
-    }
+        let Ok(tmp_node) = TmpNode::new(&data, $node_type) else {
+          return HttpRes::BadRequest().body(concat!("Failed to serialize the ", $node_type));
+        };
 
-    HttpRes::InternalServerError().body("Failed to emit temporary node")
+        if app.emit($evt, tmp_node).is_ok() {
+          return HttpRes::Ok().finish();
+        }
+
+        HttpRes::InternalServerError().body("Failed to emit temporary node")
+      }
+    };
   }
+
+  pub(crate) use add_node;
 }
 
 mod routes {
   use super::utils::*;
-  use crate::utils::AppState;
-  use actix_web::{get, post, web::Json};
-  use shogg_core::projects::schemas::node_types::{Nickname, Url};
+  use actix_web::{get, web::Json};
+  use shogg_core::projects::schemas::node_types::{Nickname, Text, Url};
 
   #[get("/")]
   pub async fn status() -> HttpRes {
     HttpRes::Ok().finish()
   }
 
-  #[post("/add-url")]
-  pub async fn add_url(app: AppState, data: Json<Url>) -> HttpRes {
-    match TmpNode::new(&data, "url") {
-      Ok(tmp_url) => emit_node(app, "add-url", tmp_url),
-      _ => HttpRes::BadRequest().body("Failed to serialize the URL"),
-    }
-  }
+  add_node!("/add-url", "add-url", "url", Url, add_url);
 
-  #[post("/add-nickname")]
-  pub async fn add_nickname(app: AppState, data: Json<Nickname>) -> HttpRes {
-    match TmpNode::new(&data, "nickname") {
-      Ok(tmp_nickname) => emit_node(app, "add-nickname", tmp_nickname),
-      _ => HttpRes::BadRequest().body("Failed to serialize the nickname"),
-    }
-  }
+  add_node!(
+    "/add-nickname",
+    "add-nickname",
+    "nickname",
+    Nickname,
+    add_nickname
+  );
+
+  add_node!("/add-text", "add-text", "text", Text, add_text);
 }
 
 use crate::utils::{AnyErr, App, CtxExt};
@@ -77,6 +86,7 @@ pub fn run_server(app: &App) -> Result<(), AnyErr> {
       .service(status)
       .service(add_url)
       .service(add_nickname)
+      .service(add_text)
   })
   .bind("127.0.0.1:2099")
   .ctx("Failed to bind a server")?
