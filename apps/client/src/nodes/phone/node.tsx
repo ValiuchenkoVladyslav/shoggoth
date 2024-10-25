@@ -11,7 +11,7 @@ function PhoneCarrier(props: Pick<Phone, "carrier">) {
   return (
     <div className="py-1">
       <h3 className="font-semibold">Carrier</h3>
-      <p>{props.carrier}</p>
+      <p className="cursor-auto select-text nodrag">{props.carrier}</p>
     </div>
   );
 }
