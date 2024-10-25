@@ -27,6 +27,14 @@ export default {
           .transform(await Bun.file("./build/index.html").text());
 
         await Bun.write("./build/index.html", htmlContent);
+
+        builder.log("Compiling service worker...");
+
+        await Bun.build({
+          entrypoints: ["./src/service_worker.ts"],
+          outdir: "./build",
+          minify: true,
+        });
       },
     },
 

@@ -8,7 +8,11 @@
     "default_popup": "index.html"
   },
 
-  "permissions": ["tabs"],
+  "background": {
+    "scripts": ["service_worker.js"]
+  },
+
+  "permissions": ["tabs", "contextMenus"],
   "host_permissions": ["http://localhost:2099/*"],
 
   "icons": {
