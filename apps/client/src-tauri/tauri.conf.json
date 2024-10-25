@@ -20,7 +20,8 @@
         "minWidth": 980,
         "minHeight": 520,
         "maximized": true,
-        "title": "shoggoth"
+        "title": "shoggoth",
+        "dragDropEnabled": false
       }
     ],
     "security": {
