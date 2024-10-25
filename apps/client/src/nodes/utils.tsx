@@ -96,7 +96,7 @@ export function createNode<
   N extends Node<T> = Node<T>,
 >(props: {
   icon: JSX.Element;
-  type?: string;
+  type: string;
   graphNode: React.ComponentType<
     NodeProps<N> & {
       useReactFlow: typeof useReactFlow<N>;
