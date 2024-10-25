@@ -1,7 +1,6 @@
 import {
   Background,
   BackgroundVariant,
-  type Connection,
   Controls,
   type FinalConnectionState,
   type Node,
@@ -16,11 +15,14 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 import { useCallback, useEffect } from "react";
+import { errorToast } from "~/components/toasts";
 import type { DataGraph, Node as DataNode } from "~/gen/core";
+import type { TmpNode } from "~/gen/tauri";
 import { nodeTypes } from "~/nodes";
 import { useProject } from "~/projects/store";
 import { useEditProjectGraphMutation } from "~/projects/tauri-api";
 import { newId } from "~/utils";
+import { useTmpNodes } from "./_use-tmp-nodes";
 
 const graphId = "GRAPH_FLOW";
 
@@ -31,14 +33,10 @@ let autosaveTimeout: NodeJS.Timeout | undefined;
 export function Graph(props: DataGraph) {
   const [nodes, _, _onNodesChange] = useNodesState(props.nodes as Node[]);
   const [edges, setEdges, onEdgesChange] = useEdgesState(props.edges);
-  const { addEdges } = useReactFlow();
+  const { addEdges, addNodes, screenToFlowPosition } = useReactFlow();
   const editProjectGraph = useEditProjectGraphMutation();
   const projId = useProject((state) => state.project?.id!);
-
-  const onConnect = useCallback(
-    (conn: Connection) => setEdges((eds) => addEdge(conn, eds)),
-    [setEdges],
-  );
+  const removeTmpNode = useTmpNodes((state) => state.removeTmpNode);
 
   // AUTOSAVE
   // biome-ignore lint/correctness/useExhaustiveDependencies: subscribing to editProjectGraph will cause infinite loop
@@ -55,8 +53,7 @@ export function Graph(props: DataGraph) {
     }, 850);
   }, [nodes, edges, projId]);
 
-  // CREATE NEW NODE IF CONNECTION ENDED ON BLANK SPACE
-  const onNodesChange = useCallback<OnNodesChange<Node>>(
+  const joinNewNodeToUnfinishedConnection = useCallback<OnNodesChange<Node>>(
     (nodes) => {
       const newNode = nodes.find((node) => node.type === "add");
 
@@ -68,16 +65,14 @@ export function Graph(props: DataGraph) {
         });
       }
 
-      if (newNode) {
-        unfinishedConnection = undefined;
-      }
+      if (newNode) unfinishedConnection = undefined;
 
       _onNodesChange(nodes);
     },
     [_onNodesChange, addEdges],
   );
 
-  const onConnectEnd = useCallback<
+  const callNodeCreationCtxMenuOnBlankSpace = useCallback<
     NonNullable<React.ComponentProps<typeof ReactFlow>["onConnectEnd"]>
   >((event, connectionState) => {
     if (connectionState.isValid) return;
@@ -132,15 +127,37 @@ export function Graph(props: DataGraph) {
       id={graphId}
       nodes={nodes}
       edges={edges}
-      onNodesChange={onNodesChange}
+      onNodesChange={joinNewNodeToUnfinishedConnection}
       onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      onConnectEnd={onConnectEnd}
+      onConnect={(conn) => setEdges((eds) => addEdge(conn, eds))}
+      onConnectEnd={callNodeCreationCtxMenuOnBlankSpace}
       onNodesDelete={recoverEdges}
       fitView
       proOptions={{ hideAttribution: true }}
       nodeTypes={nodeTypes}
       deleteKeyCode="Delete"
+      onDragOver={(e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+      }}
+      onDrop={(e) => {
+        try {
+          const tmpNode: TmpNode = JSON.parse(
+            e.dataTransfer.getData("text/plain"),
+          );
+
+          removeTmpNode(tmpNode.id);
+
+          addNodes({
+            id: newId(),
+            position: screenToFlowPosition({ x: e.clientX, y: e.clientY }),
+            type: tmpNode.type,
+            data: JSON.parse(tmpNode.data),
+          });
+        } catch (e) {
+          errorToast("Failed to create node!", String(e));
+        }
+      }}
     >
       <Background variant={BackgroundVariant.Dots} />
       <Controls
