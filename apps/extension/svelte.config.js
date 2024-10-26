@@ -41,6 +41,7 @@ export default {
     alias: {
       "~/gen/core": "../@shared/core/bindings",
       "~/gen/tauri": "../client/src-tauri/bindings",
+      "~/styles": "../@shared/styles",
     },
   },
 };
