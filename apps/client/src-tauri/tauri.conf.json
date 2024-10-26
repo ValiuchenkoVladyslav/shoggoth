@@ -2,12 +2,12 @@
   "bundle": {
     "active": true,
     "targets": "all",
-    "icon": ["icons/icon.png", "icons/icon.ico"]
+    "icon": ["../../@shared/icons/icon.png", "../../@shared/icons/icon.ico"]
   },
   "build": {
-    "beforeDevCommand": "bun run next dev --turbo",
-    "frontendDist": "../out/",
-    "devUrl": "http://localhost:3000"
+    "beforeDevCommand": "bun vite dev",
+    "frontendDist": "../build/",
+    "devUrl": "http://localhost:5173"
   },
   "productName": "shoggoth",
   "identifier": "shoggoth",

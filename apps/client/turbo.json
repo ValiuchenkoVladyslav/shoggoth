@@ -19,7 +19,7 @@
     "build:gui": {
       "dependsOn": ["^build:gui"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["out/**"]
+      "outputs": ["build/**"]
     }
   }
 }
