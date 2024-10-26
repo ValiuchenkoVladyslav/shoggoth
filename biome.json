@@ -2,7 +2,7 @@
   "$schema": "https://biomejs.dev/schemas/1.6.3/schema.json",
 
   "files": {
-    "include": ["*.json", "*.js", "*.mjs", "*.ts", "*.tsx"],
+    "include": ["*.json", "*.js", "*.mjs", "*.ts"],
     "ignore": [".vscode/settings.json"]
   },
 
@@ -20,9 +20,6 @@
     "rules": {
       "recommended": true,
 
-      "a11y": {
-        "noSvgWithoutTitle": "off"
-      },
       "suspicious": {
         "noConfusingVoidType": "off"
       },
