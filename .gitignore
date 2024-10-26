@@ -1,11 +1,6 @@
 # node deps
 **/node_modules/
 
-# next.js
-**/out/
-**/.next/
-**/next-env.d.ts
-
 # sveltekit & vite
 **/.svelte-kit/
 **/build/
@@ -15,8 +10,7 @@
 # tauri generated
 apps/client/src-tauri/gen/
 
-# typescript & generated types
-*.tsbuildinfo
+# generated types
 apps/@shared/core/bindings/
 apps/client/src-tauri/bindings/
 
