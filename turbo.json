@@ -2,14 +2,6 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
   "tasks": {
-    "build:prod": {
-      "dependsOn": ["^build:prod"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"]
-    },
-    "build:debug": {
-      "dependsOn": ["^build:debug"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"]
-    },
     "//#types:gen": {
       "dependsOn": ["^types:gen"],
       "inputs": ["**/*.rs"],
@@ -18,7 +10,22 @@
         "apps/client/src-tauri/bindings/**"
       ]
     },
+
+    "qual:check": {
+      "dependsOn": ["^qual:check", "//#types:gen"]
+    },
+
+    "build:prod": {
+      "dependsOn": ["^build:prod"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "build:debug": {
+      "dependsOn": ["^build:debug"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+
     "dev": {
+      "dependsOn": ["^dev", "//#types:gen"],
       "cache": false,
       "persistent": true
     }

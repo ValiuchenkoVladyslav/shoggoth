@@ -1,8 +1,9 @@
-# fix project linting
+# fix code quality
 sherif -f
 biome check --staged --no-errors-on-unmatched --write
 cargo fmt
-cargo clippy --no-deps --fix --allow-dirty --allow-staged
+cargo clippy --fix --allow-dirty --allow-staged
+turbo qual:check
 
 # readd staged files
 git add $(git diff --name-only --cached) --dry-run --ignore-missing | while read -r _ file; do

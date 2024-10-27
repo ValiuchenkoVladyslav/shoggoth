@@ -5,12 +5,17 @@
   "packageManager": "bun@1.1.22",
   "scripts": {
     "types:gen": "cargo test",
-    "build:prod": "turbo types:gen && turbo build:prod",
-    "build:debug": "turbo types:gen && turbo build:debug",
-    "lint:check": "sherif && biome check && cargo fmt --check && cargo clippy --no-deps",
-    "lint:fix": "sherif -f && biome check --write && cargo fmt && cargo clippy --no-deps --fix --allow-dirty --allow-staged",
-    "dev": "turbo types:gen && turbo dev --filter=shoggoth-client",
-    "dev:ce": "turbo types:gen && turbo dev",
+    "types:check": "turbo types:check",
+
+    "build:prod": "turbo build:prod",
+    "build:debug": "turbo build:debug",
+
+    "qual:check": "sherif && biome check && cargo fmt --check && cargo clippy && turbo qual:check",
+    "qual:fix": "sherif -f && biome check --write && cargo fmt && cargo clippy --fix --allow-dirty --allow-staged && turbo qual:check",
+
+    "dev": "turbo dev --filter=shoggoth-client",
+    "dev:all": "turbo dev",
+
     "prepare": "husky"
   },
   "devDependencies": {
@@ -20,5 +25,5 @@
     "turbo": "^2.2.3",
     "typescript": "^5.0.0"
   },
-  "trustedDependencies": ["@biomejs/biome"]
+  "trustedDependencies": ["@biomejs/biome", "esbuild"]
 }
