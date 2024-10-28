@@ -4,7 +4,7 @@
   import { post } from "$lib";
 </script>
 
-<section class="flex flex-col gap-2">
+<section class="flexcol gap-2">
   <button
     class="duration-300 hover:bg-white/20 w-full py-3 px-4 rounded-lg font-semibold flex justify-center gap-3"
     onclick={() => {
