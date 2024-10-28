@@ -20,8 +20,9 @@
 </script>
 
 <svelte:window
-  onclick={(evt) => (open && !btnRef?.contains(evt.target as Node)) && (open = false)}
-  onkeydown={(evt) => evt.key === "Escape" && (open = false)}
+  onclick={(e) => (open && !btnRef?.contains(e.target as Node)) && (open = false)}
+  oncontextmenu={(e) => (open && !btnRef?.contains(e.target as Node)) && (open = false)}
+  onkeydown={(e) => e.key === "Escape" && (open = false)}
 />
 
 <div>

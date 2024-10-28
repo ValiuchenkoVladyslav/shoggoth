@@ -30,7 +30,7 @@
 <!-- &>div>button to fix dialogs -->
 <div
   class={`
-    fixed z-[5] dark flexcol gap-1 rounded-lg outline outline-2 font-bold
+    fixed z-[10] dark flexcol gap-1 rounded-lg outline outline-2 font-bold
     [&>button]:flex [&>button]:items-center [&>button]:gap-2 [&>button]:p-2 [&>button:hover]:bg-white/15
     [&>div>button]:flex [&>div>button]:items-center [&>div>button]:gap-2 [&>div>button]:p-2 [&>div>button:hover]:bg-white/15
   `}
