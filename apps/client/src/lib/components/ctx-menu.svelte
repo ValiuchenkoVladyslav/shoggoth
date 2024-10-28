@@ -14,9 +14,11 @@
   let ctxOptionsRef = $state<HTMLDivElement>();
 
   $effect(() => {
-    if (typeof window !== "undefined" && ctxOptionsRef) {
+    if (ctxOptionsRef) {
       document.body.appendChild(ctxOptionsRef);
     }
+
+    return () => ctxOptionsRef && document.body.removeChild(ctxOptionsRef);
   });
 </script>
 
