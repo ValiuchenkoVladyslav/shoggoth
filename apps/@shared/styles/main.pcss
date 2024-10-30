@@ -21,3 +21,23 @@ h2 {
 .flexcol {
   @apply flex flex-col;
 }
+
+::-webkit-scrollbar {
+  @apply w-[10px];
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-800 rounded-lg;
+
+  &:hover {
+    @apply cursor-pointer;
+  }
+}
+
+::-webkit-scrollbar-corner {
+  @apply opacity-0;
+}
