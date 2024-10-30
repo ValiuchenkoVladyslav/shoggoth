@@ -4,13 +4,15 @@
   type Props = {
     options: Snippet;
     children: Snippet;
+    open?: { x: number; y: number; };
   };
 
-  let { options, children }: Props = $props();
+  let { options, children, open = $bindable() }: Props = $props();
 
 	let ctxRef: HTMLDivElement;
   let ctxAreaRef: HTMLDivElement;
-  let open = $state<{ x: number; y: number; }>();
+
+  let ctxId = String(Math.random()); // to handle nested ctx menus
 
   function hideCtx() {
     open = undefined;
@@ -18,7 +20,7 @@
   }
 </script>
 
-<div bind:this={ctxAreaRef}>
+<div bind:this={ctxAreaRef} data-ctx={ctxId}>
   {@render children()}
 </div>
 
@@ -39,6 +41,10 @@
   onclick={hideCtx}
   oncontextmenu={(evt) => {
     if (!ctxAreaRef?.contains(evt.target as Node)) return hideCtx();
+
+    const closestCtx = (evt.target as HTMLElement | null)?.closest("[data-ctx]");
+
+    if (closestCtx?.getAttribute("data-ctx") !== ctxId) return hideCtx();
 
     open = { x: evt.clientX, y: evt.clientY };
     ctxRef.showPopover();
