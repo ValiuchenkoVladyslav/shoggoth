@@ -1,11 +1,9 @@
 import type { Config } from "tailwindcss";
 
-export default {
+export default (<Config>{
   content: ["./src/**/*.{html,svelte,ts}"],
 
-  theme: {
-    extend: {},
+  experimental: {
+    optimizeUniversalDefaults: true,
   },
-
-  plugins: [],
-} as Config;
+});
