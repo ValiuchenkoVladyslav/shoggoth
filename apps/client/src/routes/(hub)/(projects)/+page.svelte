@@ -14,16 +14,16 @@
 <menu class="sticky left-0 top-0 dark p-3 rounded-lg flex gap-3 z-[5] border border-2">
   <CreateProject />
 
-  <div class="flex-1 light flex rounded-lg overflow-hidden gap-3 items-center px-3">
+  <search class="flex-1 light flex rounded-lg overflow-hidden gap-3 items-center px-3">
     <Search />
     <input
       class="flex-1 focus:outline-0 text-lg"
       placeholder="Search projects"
       bind:value={prjSearch}
     />
-  </div>
+  </search>
 
-  <Select initialText="Filter projects" bind:value={prjFilter}>
+  <Select initText="Filter projects" bind:value={prjFilter}>
     <option value="all">All</option>
     <option value="archived">Archived</option>
     <option value="active">Active</option>
