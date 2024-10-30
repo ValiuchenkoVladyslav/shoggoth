@@ -6,14 +6,25 @@
   import { getCurrentWebview } from "@tauri-apps/api/webview";
   import { Maximize, X } from "lucide-svelte";
   import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
+  import { dev, browser } from "$app/environment";
 
 	let { children } = $props();
 
-  const appWindow = typeof window !== "undefined" ? getCurrentWebview() : null;
+  const appWindow = browser ? getCurrentWebview() : null;
 </script>
 
-<!-- disable browser context menu -->
-<svelte:window oncontextmenu={(evt) => evt.preventDefault()} />
+<!-- disable some browser features in prod so app feels more native -->
+<svelte:window
+  oncontextmenu={(evt) => evt.preventDefault()}
+  onkeydown={(e) => {
+    if (dev) return;
+
+    if (["r", "f"].includes(e.key.toLowerCase()) && (e.ctrlKey || e.metaKey))
+      e.preventDefault();
+
+    if (e.key === "F5") e.preventDefault();
+  }}
+/>
 
 <QueryClientProvider client={new QueryClient()}>
   <header class="w-screen dark flex items-center justify-between pl-3" data-tauri-drag-region>
