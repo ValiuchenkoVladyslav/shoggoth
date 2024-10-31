@@ -1,10 +1,13 @@
 <script lang="ts">
   import { CtxMenu } from "$lib/components";
-  import { textInit } from "./(nodes)/text.svelte";
-  import { type Node, useSvelteFlow } from "@xyflow/svelte";
+  import { useSvelteFlow } from "@xyflow/svelte";
   import type { Snippet } from "svelte";
   import { nodes } from "./store";
   import { newId } from "$lib/utils";
+
+  import { textInit, TextIcon } from "./(nodes)/text.svelte";  
+  import { URLIcon, urlInit } from "./(nodes)/url.svelte";
+  import { NicknameIcon, nicknameInit } from "./(nodes)/nickname.svelte";
 
   type Props = {
     children: Snippet;
@@ -15,19 +18,29 @@
 
   const { screenToFlowPosition } = useSvelteFlow();
 
-  function addNode(data: Omit<Node, "id" | "position">, evt: MouseEvent) {
+  function addNode(type: string, data: () => Record<string, unknown>, evt: MouseEvent) {
     nodes.update((old) => [...old, {
       id: newId(),
       position: screenToFlowPosition({ x: evt.clientX, y: evt.clientY }),
-      ...data,
+      type,
+      data: data(),
     }]);
   }
 </script>
 
 <CtxMenu bind:open={open}>
   {#snippet options()}
-    <button onclick={(evt) => addNode({ type: "text", data: textInit() }, evt)}>
+    <button onclick={e => addNode("text", textInit, e)}>
+      <TextIcon />
       Add Text
+    </button>
+    <button onclick={e => addNode("url", urlInit, e)}>
+      <URLIcon />
+      Add URL
+    </button>
+    <button onclick={e => addNode("nickname", nicknameInit, e)}>
+      <NicknameIcon />
+      Add Nickname
     </button>
   {/snippet}
 
