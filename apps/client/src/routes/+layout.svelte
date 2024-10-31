@@ -8,7 +8,7 @@
   import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
   import { dev, browser } from "$app/environment";
 
-	let { children } = $props();
+  let { children } = $props();
 
   const appWindow = browser ? getCurrentWebview() : null;
 </script>
