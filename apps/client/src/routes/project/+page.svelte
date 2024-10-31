@@ -1,13 +1,19 @@
 <script lang="ts">
-  import { Background, BackgroundVariant, Controls, SvelteFlow, type Node } from "@xyflow/svelte";
+  import { Background, BackgroundVariant, Controls, SvelteFlow, type Node, useSvelteFlow } from "@xyflow/svelte";
   import { nodeTypes } from "./(nodes)";
   import GraphCtx from "./graph-ctx.svelte";
-  import { nodes, edges } from "./store";
+  import { nodes, edges, tmpNodes } from "./store";
+  import { newId } from "$lib/utils";
+  import type { TmpNode } from "~/gen/tauri";
 
-  let unfinishedConn: any | null = null;
+  let unfinishedConn: any; // FinalConnectionState not exported
   let nodesCache: Node[] = [];
 
+  const { screenToFlowPosition } = useSvelteFlow();
+
   $effect(() => { // on nodes change
+    if ($nodes.length === nodesCache.length) return;
+
     if (unfinishedConn && $nodes.length > nodesCache.length) {
       const missingObj = $nodes.filter(obj => !nodesCache.some(o => o.id === obj.id))[0];
 
@@ -20,7 +26,7 @@
       unfinishedConn = null;
     }
 
-    if ($nodes.length !== nodesCache.length) nodesCache = $nodes;
+    nodesCache = $nodes;
   });
 
   let ctxOpen = $state<{ x: number; y: number; }>();
@@ -37,7 +43,23 @@
 
     ondragover={(evt) => {
       evt.preventDefault();
-      if (evt.dataTransfer) evt.dataTransfer.dropEffect = "move";
+      evt.dataTransfer!.dropEffect = "move";
+    }}
+    ondrop={(evt) => {
+      try {
+        const tmpNode: TmpNode = JSON.parse(evt.dataTransfer!.getData("text/plain"));
+
+        tmpNodes.update((old) => old.filter((n) => n.id !== tmpNode.id));
+
+        nodes.update((old) => [...old, {
+          id: newId(),
+          position: screenToFlowPosition({ x: evt.clientX, y: evt.clientY }),
+          type: tmpNode.type,
+          data: JSON.parse(tmpNode.data),
+        }]);
+      } catch (e) {
+        console.error("Failed to create node!", e);
+      }
     }}
 
     onconnectend={(evt, conn) => {
