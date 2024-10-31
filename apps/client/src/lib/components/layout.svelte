@@ -58,7 +58,7 @@
 
 	<Pane
     defaultSize={100 - sidebarDefaultSize}
-    class="light rounded-tl-md h-[calc(100vh-32px)]"
+    class="light rounded-tl-md h-[calc(100vh-32px)] box-content border-l-2 border-t-2 border-white"
   >
     {@render children()}
   </Pane>
