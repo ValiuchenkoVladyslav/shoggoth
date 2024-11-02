@@ -12,6 +12,7 @@ export default {
       "~/gen/core": "../@shared/core/bindings",
       "~/gen/tauri": "../client/src-tauri/bindings",
       "~/styles": "../@shared/styles",
+      "~/icons": "../@shared/icons",
     },
   },
 };
