@@ -8,7 +8,7 @@ pub mod utils {
   pub type HttpRes = actix_web::HttpResponse;
 
   schema!(TmpNode (Clone) {
-    id: u128,
+    id: u64,
     data: String,
     r#type: String,
   });
@@ -16,7 +16,7 @@ pub mod utils {
   impl TmpNode {
     pub fn new<T: ?Sized + Serialize>(data: &T, typ: &str) -> Result<Self> {
       Ok(Self {
-        id: Box::into_raw(Box::new(0)) as u128,
+        id: Box::into_raw(Box::new(0)) as u64,
         data: to_string(data)?,
         r#type: typ.into(),
       })

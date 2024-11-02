@@ -12,9 +12,7 @@ export function cn(...inputs: ClassValue[]) {
  * @param prefix prefix for the id
  */
 export function newId(prefix = "") {
-  return (
-    prefix + String(Math.random()).slice(2) + String(Math.random()).slice(2)
-  );
+  return prefix + Math.random() * Number.MAX_SAFE_INTEGER;
 }
 
 /** open url in browser */
