@@ -3305,6 +3305,7 @@ dependencies = [
  "actix-cors",
  "actix-web",
  "anyhow",
+ "dirs",
  "flate2",
  "open",
  "reqwest",

@@ -15,6 +15,9 @@ pub fn cmd(cmd: impl AsRef<OsStr>) -> Command {
   #[cfg(target_os = "windows")]
   command.creation_flags(0x08000000); // CREATE_NO_WINDOW
 
+  #[cfg(target_os = "windows")]
+  command.env("USERPROFILE", dirs::home_dir().unwrap_or_default()); // just in case
+
   command
 }
 

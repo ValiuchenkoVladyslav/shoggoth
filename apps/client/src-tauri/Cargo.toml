@@ -16,6 +16,7 @@ reqwest = "0.12"
 flate2 = "1"
 tar = "0.4"
 open = "5"
+dirs = "5"
 tokio = { version="1", features = ["process"] }
 
 [build-dependencies]
