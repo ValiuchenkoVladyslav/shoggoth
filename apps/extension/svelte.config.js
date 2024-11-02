@@ -1,3 +1,4 @@
+import { readFileSync, writeFileSync } from "node:fs";
 import staticAdapter from "@sveltejs/adapter-static";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
@@ -13,28 +14,17 @@ export default {
 
         builder.log("Removing inline scripts...");
 
-        const htmlContent = new HTMLRewriter()
-          .on("script", {
-            element(scriptEl) {
-              scriptEl.setAttribute("src", "./main.js");
-            },
-            text(scriptText) {
-              Bun.write("./build/main.js", scriptText.text);
+        const htmlContent = readFileSync("./build/index.html").toString();
 
-              scriptText.remove();
-            },
-          })
-          .transform(await Bun.file("./build/index.html").text());
+        writeFileSync(
+          "./build/main.js",
+          htmlContent.match(/<script\b[^>]*>([\s\S]*?)<\/script>/i)[1],
+        );
 
-        await Bun.write("./build/index.html", htmlContent);
-
-        builder.log("Compiling service worker...");
-
-        await Bun.build({
-          entrypoints: ["./src/service_worker.ts"],
-          outdir: "./build",
-          minify: true,
-        });
+        writeFileSync(
+          "./build/index.html",
+          htmlContent.replace(/<script\b[^>]*>[\s\S]*?<\/script>/i, ""),
+        );
       },
     },
 

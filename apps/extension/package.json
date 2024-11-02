@@ -4,9 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build:debug": "bun --bun vite build",
-    "build:prod": "bun --bun vite build",
-    "types:check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
+    "build:debug": "bun vite build && bun run compile-worker.ts",
+    "build:prod": "bun vite build && bun run compile-worker.ts",
+    "qual:check": "svelte-kit sync && svelte-check"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.5",
@@ -22,5 +22,6 @@
   },
   "dependencies": {
     "lucide-svelte": "^0.453.0"
-  }
+  },
+  "browserslist": ["firefox > 100"]
 }
