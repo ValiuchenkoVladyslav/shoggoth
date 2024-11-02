@@ -5,28 +5,15 @@
   import { openProject, changeOpenProject } from "$lib/projects/store";
   import { getCurrentWebview } from "@tauri-apps/api/webview";
   import { Maximize, X } from "lucide-svelte";
-  import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
-  import { dev, browser } from "$app/environment";
+  import { browser } from "$app/environment";
+  import ClientInit from "./client-init.svelte";
 
   let { children } = $props();
 
-  const appWindow = browser ? getCurrentWebview() : null;
+  const tauriWindow = browser ? getCurrentWebview().window : null;
 </script>
 
-<!-- disable some browser features in prod so app feels more native -->
-<svelte:window
-  oncontextmenu={(evt) => evt.preventDefault()}
-  onkeydown={(e) => {
-    if (dev) return;
-
-    if (["r", "f"].includes(e.key.toLowerCase()) && (e.ctrlKey || e.metaKey))
-      e.preventDefault();
-
-    if (e.key === "F5") e.preventDefault();
-  }}
-/>
-
-<QueryClientProvider client={new QueryClient()}>
+<ClientInit>
   <header class="w-screen dark flex items-center justify-between pl-3" data-tauri-drag-region>
     <nav class="flex gap-4 items-center">
       <NavLink
@@ -53,7 +40,7 @@
     <menu class="flex h-8 *:grid *:place-content-center *:w-10">
       <button
         aria-label="minimize"
-        onclick={() => appWindow?.window.minimize()}
+        onclick={() => tauriWindow?.minimize()}
         class="hover:bg-[rgba(255,255,255,.10)]"
       >
         <svg fill="white" width={16} viewBox="0 0 52 52">
@@ -62,14 +49,14 @@
       </button>
 
       <button
-        onclick={() => appWindow?.window.maximize()}
+        onclick={() => tauriWindow?.maximize()}
         class="hover:bg-[rgba(255,255,255,.10)]"
       >
         <Maximize size={20} />
       </button>
 
       <button
-        onclick={() => appWindow?.window.close()}
+        onclick={() => tauriWindow?.close()}
         class="hover:bg-red-700"
       >
         <X size={24} />
@@ -78,4 +65,4 @@
   </header>
 
   {@render children()}  
-</QueryClientProvider>
+</ClientInit>
