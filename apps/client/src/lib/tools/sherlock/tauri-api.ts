@@ -7,31 +7,31 @@ import { invoke } from "@tauri-apps/api/core";
 
 const sherlockQueryKey = ["sherlock_status"] as const;
 
-/** check if {@link https://github.com/sherlock-project/sherlock Sherlock} is installed */
-export function sherlockStatusQuery() {
-  return createQuery({
-    queryKey: sherlockQueryKey,
-    queryFn: () => invoke<boolean>("sherlock_check"),
-    staleTime: Number.POSITIVE_INFINITY,
-  });
-}
+/** {@link https://github.com/sherlock-project/sherlock Sherlock} (nickname lookup) */
+export const Sherlock = {
+  /** check if Sherlock is installed */
+  statusQuery() {
+    return createQuery({
+      queryKey: sherlockQueryKey,
+      queryFn: () => invoke<boolean>("sherlock_check"),
+      staleTime: Number.POSITIVE_INFINITY,
+    });
+  },
 
-/** install {@link https://github.com/sherlock-project/sherlock Sherlock} */
-export function sherlockInstallMutation() {
-  const queryClient = useQueryClient();
+  /** install Sherlock */
+  installMut() {
+    const queryClient = useQueryClient();
 
-  return createMutation({
-    mutationFn: () => invoke("sherlock_install"),
-    onSuccess: () => queryClient.setQueryData(sherlockQueryKey, true),
-    onError(error) {
-      console.error(error); // TODO
-    },
-  });
-}
+    return createMutation({
+      mutationFn: () => invoke("sherlock_install"),
+      onSuccess: () => queryClient.setQueryData(sherlockQueryKey, true),
+    });
+  },
 
-/** search nickname using {@link https://github.com/sherlock-project/sherlock Sherlock} */
-export function sherlockSearchMutation(nickname: string) {
-  return createMutation({
-    mutationFn: () => invoke("sherlock_search", { nickname }),
-  });
-}
+  /** search nickname using Sherlock */
+  searchNicknameMut() {
+    return createMutation({
+      mutationFn: (nickname: string) => invoke("sherlock_search", { nickname }),
+    });
+  },
+};
