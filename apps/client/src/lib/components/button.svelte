@@ -6,7 +6,7 @@
 </script>
 
 <button
-  class={cn("rounded-lg min-h-10 px-4 flex gap-2 items-center font-semibold", _class)}
+  class={cn("rounded-lg min-h-10 px-4 flex gap-2 items-center font-semibold disabled:opacity-80", _class)}
   {...props}
 >
   {@render children?.()}

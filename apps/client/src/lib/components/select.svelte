@@ -11,7 +11,7 @@
   let { initText, children, value = $bindable() }: Props = $props();
 
   let detailsRef: HTMLDetailsElement;
-  let summaryRef = $state<HTMLElement>();
+  let summaryRef = $state<Element>();
   // save original width of details
   let width = $derived(summaryRef?.getBoundingClientRect().width);
 
@@ -20,7 +20,7 @@
   let textValue = $state<string>();
 </script>
 
-<details bind:this={detailsRef} bind:open={open}>
+<details bind:this={detailsRef} bind:open>
   <summary
     bind:this={summaryRef}
     class={`

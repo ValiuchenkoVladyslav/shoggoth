@@ -42,7 +42,7 @@
   oncontextmenu={(evt) => {
     if (!ctxAreaRef?.contains(evt.target as Node)) return hideCtx();
 
-    const closestCtx = (evt.target as HTMLElement | null)?.closest("[data-ctx]");
+    const closestCtx = (evt.target as Element | null)?.closest("[data-ctx]");
 
     if (closestCtx?.getAttribute("data-ctx") !== ctxId) return hideCtx();
 
