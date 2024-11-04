@@ -25,6 +25,7 @@
     "@tauri-apps/api": "^2.0.3",
     "@xyflow/svelte": "^0.1.21",
     "clsx": "^2.1.1",
+    "flag-icons": "^7.2.3",
     "lucide-svelte": "^0.453.0",
     "paneforge": "^0.0.6",
     "tailwind-merge": "^2.5.4"
