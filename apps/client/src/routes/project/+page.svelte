@@ -3,13 +3,38 @@
   import { nodeTypes } from "./(nodes)";
   import GraphCtx from "./graph-ctx.svelte";
   import { nodes, edges, tmpNodes } from "./store";
-  import { newId } from "$lib/utils";
   import type { TmpNode } from "~/gen/tauri";
-
-  let unfinishedConn: any; // FinalConnectionState not exported
-  let nodesCache: Node[] = [];
+  import { get } from "svelte/store";
+  import type { Node as DataNode } from "~/gen/core";
+  import { editProjectGraph } from "$lib/projects/tauri-api";
+  import { openProject } from "$lib/projects/store";
 
   const { screenToFlowPosition } = useSvelteFlow();
+
+  let nodesCache: Node[] = [];
+
+  // AUTOSAVE
+  let autosaveTimeout: NodeJS.Timeout | undefined;
+  const editGraph = editProjectGraph();
+
+  $effect(() => {
+    clearTimeout(autosaveTimeout);
+    const _nodes = $nodes;
+    const _edges = $edges;
+
+    autosaveTimeout = setTimeout(() => {
+      get(editGraph).mutate({
+        id: get(openProject)!.id,
+        graph: {
+          nodes: _nodes as DataNode[],
+          edges: _edges,
+        }
+      });
+    }, 850);
+  });
+
+  // CREATE NEW NODE IF CONNECTION ENDS ON BLANK SPACE
+  let unfinishedConn: any; // FinalConnectionState not exported
 
   $effect(() => { // on nodes change
     if ($nodes.length === nodesCache.length) return;
@@ -52,7 +77,7 @@
         tmpNodes.update((old) => old.filter((n) => n.id !== tmpNode.id));
 
         nodes.update((old) => [...old, {
-          id: newId(),
+          id: String(tmpNode.id),
           position: screenToFlowPosition({ x: evt.clientX, y: evt.clientY }),
           type: tmpNode.type,
           data: JSON.parse(tmpNode.data),
