@@ -28,6 +28,7 @@
     "flag-icons": "^7.2.3",
     "lucide-svelte": "^0.453.0",
     "paneforge": "^0.0.6",
+    "svelte-tel-input": "^3.5.2",
     "tailwind-merge": "^2.5.4"
   },
   "browserslist": ["edge > 100", "safari > 12"]
