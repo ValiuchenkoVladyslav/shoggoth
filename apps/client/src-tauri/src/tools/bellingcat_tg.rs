@@ -6,7 +6,7 @@ mod utils {
 
   pub const APP_CMD: &str = "telegram-phone-number-checker";
 
-  pub fn get_cattg_dir(app: &App) -> PathBuf {
+  pub fn cattg_dir(app: &App) -> PathBuf {
     app.tools_dir().join(APP_CMD)
   }
 
@@ -45,38 +45,43 @@ pub mod cmds {
 
   #[command(rename_all = "snake_case")]
   pub async fn cattg_install(app: App) -> CmdRes {
-    cmd("pipx")
-      .args(["install", APP_CMD])
+    cmd("git") // installing with pipx is unreliable
+      .args([
+        "clone",
+        "--depth",
+        "1",
+        "--branch",
+        "main",
+        "https://github.com/bellingcat/telegram-phone-number-checker.git",
+      ])
+      .current_dir(app.tools_dir())
       .spawn()?
       .wait()
       .await?;
 
-    fs::create_dir_all(get_cattg_dir(&app))?;
+    cmd("pip")
+      .args(["install", "-r", "requirements.txt"])
+      .current_dir(cattg_dir(&app))
+      .spawn()?
+      .wait()
+      .await?;
 
     Ok(())
   }
 
   #[command(rename_all = "snake_case")]
-  pub async fn cattg_check() -> CmdRes {
-    let output = cmd(APP_CMD).arg("--help").output().await?;
-
-    let error_str = bytes_string(output.stderr);
-
-    if !error_str.is_empty() {
-      Err(AnyErr::msg(error_str))?;
-    }
-
-    Ok(())
+  pub async fn cattg_check(app: App) -> CmdRes<bool> {
+    Ok(fs::exists(cattg_dir(&app).join("pyproject.toml"))?)
   }
 
   #[command(rename_all = "snake_case")]
   pub async fn cattg_phone(app: App, envs: [(&str, &str); 3], phone: &str) -> CmdRes<CatPhone> {
-    let cat_dir = get_cattg_dir(&app);
+    let cat_dir = cattg_dir(&app);
 
-    let mut cmd = cmd(APP_CMD)
+    let mut cmd = cmd("python")
+      .args(["main.py", "--phone-numbers", phone])
+      .current_dir(cat_dir.join("telegram_phone_number_checker"))
       .envs(envs)
-      .args(["--phone-numbers", phone])
-      .current_dir(&cat_dir)
       .stderr(Stdio::piped())
       .stdin(Stdio::piped())
       .spawn()?;
