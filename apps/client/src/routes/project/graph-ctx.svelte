@@ -8,6 +8,11 @@
   import { textInit, TextIcon } from "./(nodes)/text.svelte";  
   import { URLIcon, urlInit } from "./(nodes)/url.svelte";
   import { NicknameIcon, nicknameInit } from "./(nodes)/nickname.svelte";
+  import { countryInit } from "./(nodes)/country.svelte";
+  import { Flag } from "lucide-svelte";
+  import { phoneInit, PhoneIcon } from "./(nodes)/phone.svelte";
+  import TelegramIcon from "$lib/components/telegram-icon.svelte";
+  import { tgInit } from "./(nodes)/telegram.svelte";
 
   type Props = {
     children: Snippet;
@@ -18,9 +23,9 @@
 
   const { screenToFlowPosition } = useSvelteFlow();
 
-  function addNode(type: string, data: () => Record<string, unknown>, evt: MouseEvent) {
-    nodes.update((old) => [...old, {
-      id: newId(),
+  function addNode(type: string, data: () => Record<string, unknown>) {
+    return (evt: MouseEvent) => nodes.update((old) => [...old, {
+      id: newId("from-tmp-"),
       position: screenToFlowPosition({ x: evt.clientX, y: evt.clientY }),
       type,
       data: data(),
@@ -28,19 +33,31 @@
   }
 </script>
 
-<CtxMenu bind:open={open}>
+<CtxMenu bind:open>
   {#snippet options()}
-    <button onclick={e => addNode("text", textInit, e)}>
+    <button onclick={addNode("text", textInit)}>
       <TextIcon />
       Add Text
     </button>
-    <button onclick={e => addNode("url", urlInit, e)}>
+    <button onclick={addNode("url", urlInit)}>
       <URLIcon />
       Add URL
     </button>
-    <button onclick={e => addNode("nickname", nicknameInit, e)}>
+    <button onclick={addNode("nickname", nicknameInit)}>
       <NicknameIcon />
       Add Nickname
+    </button>
+    <button onclick={addNode("country", countryInit)}>
+      <Flag />
+      Add Country
+    </button>
+    <button onclick={addNode("phone", phoneInit)}>
+      <PhoneIcon />
+      Add Phone
+    </button>
+    <button onclick={addNode("telegram", tgInit)}>
+      <TelegramIcon width={24} />
+      Add Telegram
     </button>
   {/snippet}
 

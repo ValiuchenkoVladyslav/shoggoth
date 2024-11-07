@@ -1,6 +1,6 @@
 <script module lang="ts">
   import type { Text } from "~/gen/core";
-  import { Text as TextIcon, Search } from "lucide-svelte";
+  import { Text as TextIcon } from "lucide-svelte";
 
   export function textInit(text = ""): Text {
     return { text };
@@ -11,37 +11,24 @@
 
 <script lang="ts">
   import { Textarea } from "$lib/components";
-  import BaseNode from "./base-node.svelte";
-  import { browse } from "$lib/utils";
+  import { nodes } from "../store";
+  import { BaseNode, SearchText } from "./(utils)";
 
   let { id, data }: TypedNode<Text> = $props();
 
-  const googleSearch = "https://www.google.com/search?q=";
-  const ddgSearch = "https://duckduckgo.com/?q=";
-  const yandexSearch = "https://yandex.com/search/?text=";
+  let text = $state(data.text);
 
-  const searchUrl = (pref: string) => pref + encodeURIComponent(data.text ?? "");
-  const searchExactUrl = (pref: string) => pref + encodeURIComponent(`"${data.text}"`);
+  $effect(() => {
+    nodes.update((old) => old.map((n) => n.id !== id ? n : {
+      ...n,
+      data: { ...n.data, text },
+    }));
+  });
 </script>
 
 <BaseNode {id}>
   {#snippet opts()}
-    <button onclick={() => {
-      browse(searchUrl(googleSearch));
-      browse(searchUrl(ddgSearch));
-      browse(searchUrl(yandexSearch));
-    }}>
-      <Search />
-      search text
-    </button>
-    <button onclick={() => {
-      browse(searchExactUrl(googleSearch));
-      browse(searchExactUrl(ddgSearch));
-      browse(searchExactUrl(yandexSearch));
-    }}>
-      <Search />
-      search exact text
-    </button>
+    <SearchText {text} />
   {/snippet}
 
   <div class="w-64 dark rounded-lg py-2 px-3 flexcol gap-2">
@@ -50,6 +37,6 @@
       TEXT
     </h2>
 
-    <Textarea bind:value={data.text} />
+    <Textarea bind:value={text} />
   </div>
 </BaseNode>

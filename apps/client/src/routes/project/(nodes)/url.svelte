@@ -10,7 +10,7 @@
 </script>
 
 <script lang="ts">
-  import BaseNode from "./base-node.svelte";
+  import { BaseNode } from "./(utils)";
 
   let { id, data }: TypedNode<Url> = $props();
 </script>

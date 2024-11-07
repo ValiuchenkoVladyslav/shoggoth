@@ -1,5 +1,6 @@
 <script lang="ts">
   import "@xyflow/svelte/dist/style.css";
+  import "flag-icons/css/flag-icons.min.css";
 
   import { Layout } from "$lib/components";
   import { nodes, edges, tmpNodes } from "./store";
