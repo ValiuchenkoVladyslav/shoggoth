@@ -1,12 +1,27 @@
 import {
+  type QueryClient,
+  type Updater,
   createMutation,
   createQuery,
   useQueryClient,
 } from "@tanstack/svelte-query";
 import { invoke } from "@tauri-apps/api/core";
 import type { DataGraph, ProjectBase, ProjectMeta } from "~/gen/core";
-import { prjGraphQueryKey, projectsQueryKey, setProjects } from "./utils";
 
+const projectsQueryKey = ["projects"] as const;
+
+function setPrjs(
+  client: QueryClient,
+  updater: Updater<ProjectMeta[] | undefined, ProjectMeta[] | undefined>,
+) {
+  client.setQueryData(projectsQueryKey, updater);
+}
+
+function prjGraphQueryKey(id: ProjectMeta["id"]) {
+  return ["get_graph", id] as const;
+}
+
+// FNS ========================================================================
 export function getProjects() {
   return createQuery({
     queryKey: projectsQueryKey,
@@ -29,7 +44,7 @@ export function createProject() {
       return invoke<ProjectMeta>("create_project", { project_base });
     },
     onSuccess(res) {
-      setProjects(client, (old) => [...(old ?? []), res]);
+      setPrjs(client, (old) => [...(old ?? []), res]);
     },
   });
 }
@@ -42,7 +57,7 @@ export function editProject() {
       return invoke("edit_meta", { meta });
     },
     onSuccess(_, vars) {
-      setProjects(client, (old) =>
+      setPrjs(client, (old) =>
         old?.map((p) => (p.id === vars.id ? { ...vars } : p)),
       );
     },
@@ -57,9 +72,7 @@ export function editProjectGraph() {
       return invoke("edit_graph", vars);
     },
     onSuccess(_, vars) {
-      client.invalidateQueries({
-        queryKey: prjGraphQueryKey(vars.id),
-      });
+      client.setQueryData(prjGraphQueryKey(vars.id), vars.graph);
     },
   });
 }
@@ -72,7 +85,7 @@ export function deleteProject() {
       return invoke("delete_project", { id });
     },
     onSuccess(_, id) {
-      setProjects(client, (old) => old?.filter((p) => p.id !== id));
+      setPrjs(client, (old) => old?.filter((p) => p.id !== id));
     },
   });
 }

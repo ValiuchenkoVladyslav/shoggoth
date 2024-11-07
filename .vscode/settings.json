@@ -4,8 +4,8 @@
     "Cargo.lock": true,
     "LICENSE": true,
     "**/postcss.config.mjs": true,
-    "**/components.json": true,
-    "**/build.rs": true,
+    "**/tsconfig.json": true,
+    "**/build.rs": true
   },
   "explorer.excludeGitIgnore": true,
 

@@ -30,8 +30,8 @@
   style={open ? `margin: ${open.y}px 0 0 ${open.x}px;` : "visibility: hidden;"}
   class={`
     flexcol dark gap-1 rounded-lg outline outline-2 font-bold p-0
-    [&>button]:flex [&>button]:items-center [&>button]:gap-2 [&>button]:p-2 [&>button:hover]:bg-white/15
-    [&>div>button]:flex [&>div>button]:items-center [&>div>button]:gap-2 [&>div>button]:p-2 [&>div>button:hover]:bg-white/15
+    [&>button]:flex [&>button]:items-center [&>button]:gap-2 [&>button]:h-10 [&>button]:px-2 [&>button:hover]:bg-white/15
+    [&>div>button]:flex [&>div>button]:items-center [&>div>button]:gap-2 [&>div>button]:h-10 [&>div>button]:px-2 [&>div>button:hover]:bg-white/15
   `}
 >
   {@render options()}
