@@ -34,6 +34,8 @@ pub mod cmds {
 
   #[command(rename_all = "snake_case")]
   pub fn sherlock_search(nickname: &str) -> CmdRes {
+    dbg!(&nickname);
+
     cmd(APP_CMD)
       .args([nickname, "--nsfw", "--browse"])
       .spawn()?;

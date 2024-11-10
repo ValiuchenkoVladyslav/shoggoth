@@ -66,6 +66,8 @@ pub mod cmds {
 
   #[command(rename_all = "snake_case")]
   pub async fn infoga_scan(app: App, envs: [(&str, &str); 4], phone: &str) -> CmdRes<Phone> {
+    dbg!(&envs, &phone);
+
     const CARRIER_PREFIX: &str = "Carrier: ";
     const LOCATION_PREFIX: &str = "Location: ";
 

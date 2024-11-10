@@ -9,22 +9,6 @@ mod utils {
   pub fn cattg_dir(app: &App) -> PathBuf {
     app.tools_dir().join(APP_CMD)
   }
-
-  schema!(CatPhone {
-    id?: u64,
-    username?: String,
-    usernames?: Vec<String>,
-    first_name?: String,
-    last_name?: String,
-    fake?: bool,
-    verified?: bool,
-    premium?: bool,
-    bot?: bool,
-    restricted?: bool,
-    restricted_reason?: String,
-    user_was_online?: String,
-    phone?: String,
-  });
 }
 
 pub mod cmds {
@@ -32,6 +16,7 @@ pub mod cmds {
   use crate::utils::*;
 
   use serde_json::from_slice;
+  use shogg_core::projects::schemas::node_types::TelegramUser;
   use std::{collections::HashMap, fs, process::Stdio};
   use tauri::{
     async_runtime::{block_on, spawn},
@@ -75,7 +60,15 @@ pub mod cmds {
   }
 
   #[command(rename_all = "snake_case")]
-  pub async fn cattg_phone(app: App, envs: [(&str, &str); 3], phone: &str) -> CmdRes<CatPhone> {
+  pub async fn cattg_phone(app: App, envs: [(&str, &str); 3], phone: &str) -> CmdRes<TelegramUser> {
+    dbg!(&envs, &phone);
+
+    for (env, val) in &envs {
+      if val.is_empty() {
+        return Err(AnyErr::msg(format!("Env var {env} is empty")))?;
+      }
+    }
+
     let cat_dir = cattg_dir(&app);
 
     let mut cmd = cmd("python")
@@ -126,9 +119,13 @@ pub mod cmds {
     cmd.wait().await?;
     otp_waiter.abort();
 
-    let res_file = fs::read(cat_dir.join("results.json"))?;
+    let res_file = fs::read(
+      cat_dir
+        .join("telegram_phone_number_checker")
+        .join("results.json"),
+    )?;
 
-    let mut res: HashMap<String, CatPhone> = from_slice(&res_file)?;
+    let mut res: HashMap<String, TelegramUser> = from_slice(&res_file)?;
 
     Ok(res.remove(phone).ctx("Phone not found")?)
   }
