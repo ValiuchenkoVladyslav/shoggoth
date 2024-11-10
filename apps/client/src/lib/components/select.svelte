@@ -23,10 +23,10 @@
 <details bind:this={detailsRef} bind:open>
   <summary
     bind:this={summaryRef}
-    class={`
+    class="
       cursor-pointer select-none light rounded-lg h-full flex items-center justify-between px-3 gap-3 font-semibold
-      ${open ? "rounded-b-none" : ""}
-    `}
+      {open ? "rounded-b-none" : ""}
+    "
     style={width ? `width: ${width}px` : ""}
   >
     {textValue || initText}
@@ -49,11 +49,11 @@
       value = option.value;
       textValue = option.textContent ?? value;
     }}
-    class={`
+    class="
       light rounded-b-lg fixed
       outline outline-2 outline-black outline-t-0
       *:p-2 hover:*:bg-black/10 hover:*:cursor-pointer *:font-semibold
-    `}
+    "
     style={width ? `width: ${width}px` : ""}
   >
     {@render children()}

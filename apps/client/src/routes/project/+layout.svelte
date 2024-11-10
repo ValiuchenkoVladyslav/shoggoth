@@ -9,6 +9,7 @@
   import { SvelteFlowProvider } from "@xyflow/svelte";
   import { listen } from "@tauri-apps/api/event";
   import type { TmpNode } from "~/gen/tauri";
+  import CatOtpRequest from "$lib/tools/bellingcat-tg/otp-request.svelte";
 
   const graph = getProjectGraph($openProject?.id ?? "INVALID_ID");
 
@@ -30,6 +31,8 @@
 
   let { children } = $props();
 </script>
+
+<CatOtpRequest />
 
 <SvelteFlowProvider>
   <Layout sidebarClasses="justify-between">

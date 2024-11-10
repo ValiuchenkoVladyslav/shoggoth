@@ -6,13 +6,12 @@
   type DialogProps = {
     title: string;
     options?: Snippet;
-    trigger: Snippet;
+    trigger?: Snippet;
+    dialogRef?: HTMLDialogElement;
     children: Snippet;
   };
 
-  let { title, trigger, options, children }: DialogProps = $props();
-
-	let dialogRef: HTMLDialogElement;
+  let { title, trigger, options, children, dialogRef = $bindable() }: DialogProps = $props();
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -20,7 +19,7 @@
 <dialog
   bind:this={dialogRef}
   onclick={(evt) => {
-    const rect = dialogRef.getBoundingClientRect();
+    const rect = dialogRef!.getBoundingClientRect();
 
     if (!(
       rect.top <= evt.clientY
@@ -28,7 +27,7 @@
       && rect.left <= evt.clientX
       && evt.clientX <= rect.left + rect.width
     )) {
-      dialogRef.close();
+      dialogRef!.close();
     }
   }}
   class="py-4 px-5 dark min-w-[330px] rounded-lg outline outline-2 backdrop:bg-black/50"
@@ -41,7 +40,7 @@
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <section
     class="mt-6 flex gap-3 items-center"
-    onclick={(evt) => (evt.target as Element).closest("button") && dialogRef.close()}
+    onclick={(evt) => (evt.target as Element).closest("button") && dialogRef!.close()}
   >
     {@render options?.()}
 
@@ -52,8 +51,10 @@
   </section>
 </dialog>
 
-<!-- svelte-ignore a11y_click_events_have_key_events -->
-<!-- svelte-ignore a11y_no_static_element_interactions -->
-<div onclick={() => dialogRef.showModal()}>
-  {@render trigger()}
-</div>
+{#if trigger}
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <div onclick={() => dialogRef!.showModal()}>
+    {@render trigger()}
+  </div>
+{/if}
