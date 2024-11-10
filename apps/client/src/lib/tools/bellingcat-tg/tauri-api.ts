@@ -5,7 +5,7 @@ import {
 } from "@tanstack/svelte-query";
 import { invoke } from "@tauri-apps/api/core";
 import { get } from "svelte/store";
-import type { CatPhone } from "~/gen/tauri";
+import type { TelegramUser } from "~/gen/core";
 import {
   l_tgApiHash,
   l_tgApiId,
@@ -42,7 +42,7 @@ export const BellingCatTg = {
   tgCheck() {
     return createMutation({
       mutationFn(phone: string) {
-        return invoke<CatPhone>("cattg_phone", {
+        return invoke<TelegramUser>("cattg_phone", {
           phone,
           envs: [
             [l_tgApiId, get(tgApiId)],

@@ -1,6 +1,6 @@
 <script module lang="ts">
   import type { TelegramUser } from "~/gen/core";
-  import TgIcon from "$lib/components/telegram-icon.svelte";
+  import { TgIcon } from "$lib/components";
 
   export function tgInit(username = ""): TelegramUser {
     return { username };
