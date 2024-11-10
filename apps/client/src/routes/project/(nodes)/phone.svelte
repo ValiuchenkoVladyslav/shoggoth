@@ -16,7 +16,7 @@
   import { BellingCatTg } from "$lib/tools/bellingcat-tg/tauri-api";
   import { BaseNode, createChildren, SearchText } from "./(utils)";
   import { countryInit } from "./country.svelte";
-  import TelegramIcon from '$lib/components/telegram-icon.svelte';
+  import { TgIcon } from "$lib/components";
 
   let { id, data, ...props }: TypedNode<Phone> = $props();
 
@@ -119,10 +119,19 @@
     </button>
     <button
       disabled={!valid}
-      onclick={() => $tgCheck.mutate(phone)}
+      onclick={() => {
+        $tgCheck.mutateAsync(phone).then((res) => {
+          createChildren({ id, data, ...props }, [
+            {
+              type: "telegram",
+              data: res,
+            }
+          ]);
+        });
+      }}
       class="disabled:opacity-75"
     >
-      <TelegramIcon width={24} />
+      <TgIcon width={24} />
       Check in Telegram
     </button>
 

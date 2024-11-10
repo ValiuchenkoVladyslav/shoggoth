@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CtxMenu } from "$lib/components";
+  import { CtxMenu, TgIcon } from "$lib/components";
   import { useSvelteFlow } from "@xyflow/svelte";
   import type { Snippet } from "svelte";
   import { nodes } from "./store";
@@ -11,7 +11,6 @@
   import { countryInit } from "./(nodes)/country.svelte";
   import { Flag } from "lucide-svelte";
   import { phoneInit, PhoneIcon } from "./(nodes)/phone.svelte";
-  import TelegramIcon from "$lib/components/telegram-icon.svelte";
   import { tgInit } from "./(nodes)/telegram.svelte";
 
   type Props = {
@@ -56,7 +55,7 @@
       Add Phone
     </button>
     <button onclick={addNode("telegram", tgInit)}>
-      <TelegramIcon width={24} />
+      <TgIcon width={24} />
       Add Telegram
     </button>
   {/snippet}

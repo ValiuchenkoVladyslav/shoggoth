@@ -8,7 +8,7 @@
     LoaderCircle,
   } from "lucide-svelte";
   import { browse } from "$lib/utils";
-  import Button from "$lib/components/button.svelte";
+  import { Btn } from "$lib/components";
   import type { CreateMutationResult, CreateQueryResult } from "@tanstack/svelte-query";
 
   type Props = {
@@ -42,7 +42,7 @@
       </button>
     </div>
 
-    <Button
+    <Btn
       class="light"
       disabled={!!$installedQuery.data}
       onclick={() => $install.mutate()}
@@ -57,7 +57,7 @@
         <Download />
         Download
       {/if}
-    </Button>
+    </Btn>
   </summary>
 
   <article class="pb-4">
